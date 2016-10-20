@@ -1,0 +1,9 @@
+# json files
+temp.json
+beer_recs_all.json
+beer_recs.json
+
+# data files
+beer_reviews/
+ml-100k/
+

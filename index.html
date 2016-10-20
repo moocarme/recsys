@@ -1,0 +1,2747 @@
+<!DOCTYPE html>
+<html>
+    <head>
+  	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script src="http://www.mattmoocar.me/insight-DC/js/jquery.collapse.js"></script>
+    
+		<script type="text/javascript" src="http://www.mattmoocar.me/insight-DC/js/shCore.js"></script>
+		<script type="text/javascript" src="http://www.mattmoocar.me/insight-DC/js/shBrushPython.js"></script>
+		<script type="text/javascript" src="http://www.mattmoocar.me/insight-DC/js/shBrushSql.js"></script>
+		<script type="text/javascript" src="http://www.mattmoocar.me/insight-DC/js/shBrushPlain.js"></script>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+      	
+    <title>Insight Data Challenge - Super Marketing Insights</title>
+    <link rel="icon" type="image/png" href="/img/profile.png">
+    
+    <link href="http://www.mattmoocar.me/insight-DC/css/shCore.css" rel="stylesheet" type="text/css" />
+    <link href="http://www.mattmoocar.me/insight-DC/css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+		<link href="http://www.mattmoocar.me/insight-DC/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="http://www.mattmoocar.me/insight-DC/css/main.css">
+		<link rel="stylesheet" href="http://www.mattmoocar.me/insight-DC/css/font-awesome.min.css">
+    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+
+		<link rel="favicon-144-precomposed"  href="/img/profile.png">
+		<link rel="shortcut icon" href="/img/profile.png">
+    <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/junction" type="text/css"/> 
+
+    <script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+
+    <script type="text/javascript" src="//use.typekit.net/sjt4iho.js"></script>
+ 		<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+      
+    <!--<script src="../node_modules/chart.js/dist/Chart.js"></script>-->
+		<script src="http://www.mattmoocar.me/insight-DC/js/jquery-1.11.0.js"></script>
+
+		
+      	<style> 
+        /***** BASE STYLES *****/ 
+        body{
+          background-image: url('../restaurant_icons.png');
+        }
+        h1{
+          font-size: 200%;
+          font-family: 'JunctionRegular';
+        }
+
+        h2{
+          font-size: 180%;
+        }
+        h3{
+          font-size: 160%;
+        }
+
+        h4{
+          font-size: 140%;
+        }
+        h5{
+          font-size: 120%;
+        }
+
+        h6{
+          font-size: 110%;
+        }
+        p {
+           font-family: 'JunctionRegular';
+           font-weight: normal;
+           font-style: normal;
+        } 
+        code {
+      		  color: inherit;
+      		  background-color: rgba(0, 0, 0, 0.04);
+      		}
+		 pre:not([class]) {
+		    background-color: white;
+		  }
+        blockquote {
+          font-size: 21px;  
+          margin: 90px 0 90px 0; 
+          font-family: 'JunctionRegular';
+        }
+
+        cite {
+          display: block;
+          text-align: right;
+          margin-top: 15px;
+        }
+
+        .firstcharacter { 
+          float: left; 
+          font-size: 108px; 
+          line-height: 70px;  
+          padding-right: 7px;  
+        }  
+
+        .fa {
+          cursor: pointer;
+        }  
+
+        /** Navigation **/ 
+          .main-navigation, .nav-toggle  {
+            display: none;
+          }
+
+          #desktopNav	{
+            position: absolute;
+            height: 100%;
+            background-color: #233140;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            width: 230px;
+          }
+
+          #desktopNav.fixedElement {
+            position: fixed;
+            height: 100%;
+            top: 0;
+            left: 0;
+          } 
+
+
+        nav ul li a {
+          font-family: 'JunctionRegular';
+          color: #E8E8E8;
+          text-decoration: none;
+          transition: color 0.3s;
+          letter-spacing: 1px;
+        } 
+
+        nav ul li a:hover {
+          color: #C7C7C7;
+        } 
+
+         .secondUL li {
+            padding: 10px 10px 0 0;
+          }
+
+          .navHeadline {
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600; 
+            color: #4C91B8;
+          }
+
+        .navSection {
+            margin-bottom: 20px;
+          } 
+
+          .nav-toggle {
+            transform: translateY(-100%);
+            overflow: hidden;
+            height: 50px;
+            background: rgba(29, 55, 69, 0.9);
+            transition: transform 0.9s ease;
+            color: #E9A857;
+            font-size: 20px;
+          } 
+
+         #bootstrap-overrides  .nav-toggle.show {
+            height: 50px;
+            transform: translateY(0%);
+            transition: transform 0.9s ease;
+          }
+
+         #bootstrap-overrides  .main-navigation {
+            position: fixed;
+            top: 0;
+            left:0; 
+            width: 270px;
+            height: 100%;
+            background: rgba(29, 55, 69, 0.9);
+          }
+
+
+        .center {
+          max-width: 1170px;
+          margin: 0 auto;
+          position: relative;
+        }
+        .img-center{
+          margin-left: 115px;
+          margin-top: 40px;
+          margin-bottom: 40px;
+        }
+
+        .wrapper {
+          margin-left: 230px;
+        } 	  
+          
+        .left {
+          width: 50%;
+          float:left;
+        }
+
+        .right {
+          position: relative; 
+          float:left;
+          width: 50%;
+        }  
+
+
+        /** Exeptions **/
+        article#one {
+            margin-bottom: 50px;
+          	padding: 0;
+        }
+          
+        article#two {
+            padding-top: 0
+        } 
+          
+        article#four h2 {
+            margin-top:.5em;
+        } 
+          
+        article#eight .quote {
+            margin-top: 30px 0 75px 0;
+        } 
+          
+        article#eight .center .left, article#six .center .left {
+            margin-right: 5%;
+        } 
+          
+        article#eight .right, article#six .right {
+            width: 45%;
+        }
+          
+        article#eight .right img, article#six .right img {
+            width: 100%;
+        }  
+
+        /*** Footer ***/
+          footer {
+            background-color: #1D3745; 
+            width: 100%; 
+            position: absolute; 
+            z-index: 9999; 
+            bottom: -70px;
+          } 
+          
+           footer p {
+            float: left;
+          }
+
+          .mktoForm {
+            width: auto!important;
+          }
+
+          .bulkUpImage {
+          	width: 46%;
+          }	
+          
+          /***** Desktop Small *****/
+          @media screen and (max-width: 1441px) {
+
+            .center {
+                max-width: 970px;
+            }
+
+            .nasties {
+              top: 165px;
+              width: 60%;
+            }
+
+            .container .sideText1, .container .sideText2, .container .sideText3, .container .sideText4, .container .sideText5 {
+              margin-left: 60px;
+              margin-right: auto;
+            }
+
+            .container .sideText1 p, 
+.container .sideText2 p, .container .sideText3 p, .container .sideText4 
+p, .container .sideText5 p {
+              margin-left: 0;
+            }
+
+            .thickOrangeLine {
+              display: none;
+              top: 30px;
+              width: 43px;
+            }
+
+            .bulkUpImage {
+              width: 65%;
+            }
+          }  
+
+          @media screen and (max-width: 1225px) {
+            .center {
+              max-width: 870px;
+            }
+
+            .bulkUpImage {
+              width: 78%;
+            }
+          }
+
+          @media screen and (max-width: 1170px) {
+            .center {
+              max-width: 770px;
+            }
+
+            footer {
+              display: none;
+            }
+
+            .bulkUpImage { 
+              width: 100%;
+              margin-left: 10%;
+            }
+          }   
+
+          @media screen and (max-width: 1024px) {
+
+            .learnDesktop {
+              right: -155px
+            }
+
+            .center {
+              max-width: 670px;
+            }
+          }  
+
+         /* Style the list */
+ul.tab {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+/* Float the list items side by side */
+ul.tab li {float: left;}
+
+/* Style the links inside the list items */
+ul.tab li a {
+    display: inline-block;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+/* Change background color of links on hover */
+ul.tab li a:hover {background-color: transparent;}
+
+/* Create an active/current tablink class */
+ul.tab a:focus {background-color: #ddd;}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+          
+        </style>
+
+
+<style>.mktoGen.mktoImg {display:inline-block; line-height:0;}</style>
+  	</head>
+  	<body id="bootstrap-overrides">
+      <style type="text/css"> 
+      #bootstrap-overrides hr.star-light, hr.star-prinary{  
+        border-color: transparent;
+        margin-left: auto;
+          margin-right: auto;
+        }
+      
+      #bootstrap-overrides hr.star-light {  
+        border-color: #18BC9C;
+        margin-left: auto;
+          margin-right: auto;
+        }
+       #bootstrap-overrides  hr.star-light:after {
+      background-color: transparent;
+      color: #2C3E50;}
+
+      #bootstrap-overrides  hr.star-primary:after {
+      background-color: transparent;
+      color: #2C3E50;}
+
+      #bootstrap-overrides div.post-overlay-header{
+        background-color: #2C3E50;
+        display:inline-block;
+      margin-left:30px;
+      margin-right:auto;
+      width:400px;
+      height:312px;
+      }
+      canvas {
+          padding-left: 0;
+          padding-right: 0;
+          margin-left: auto;
+          margin-right: auto;
+          display: block;
+          width: 90px;
+      }
+      img{
+        border: 3px solid #2C3E50;
+        padding: 5px;
+      }
+      </style>
+  	</body>
+	<body class="layout" id="bodyId">
+      	
+		<div class="extraWrapper" style="position:relative;">	
+			<!-- DESKTOP FIXED NAV -->
+         	<div id="desktopNav">
+            <div style="position: relative; height: 100%;">
+               <nav>
+                  <ul class="firstUL">	
+                    <br>
+                    <li class="navSection"><span class="navHeadline"><a style="color: #4C91B8;" href="http://www.mattmoocar.me">Home</a></span>
+                      <ul class="secondUL"> 
+                          <li><a href="http://www.mattmoocar.me">Matt Moocarme</a></li>
+                          <li><a href="http://www.mattmoocar.me/blog">Blog</a></li>
+                      </ul>
+                    </li>
+                    <li class="navSection"><span class="navHeadline">Contents</span>
+                      <ul class="secondUL">	
+                          <li><a href="/examples/SmoothPageScroll/#one">Goal</a></li>
+                          <li><a href="/examples/SmoothPageScroll/#two">Approach</a></li>
+                          <li><a href="/examples/SmoothPageScroll/#three">Exploratory Data Analysis</a></li>
+                          <li><a href="/examples/SmoothPageScroll/#four">Spending Patterns</a></li>
+                          <li><a href="/examples/SmoothPageScroll/#five">The Spend Radius</a></li>
+                          <li><a href="/examples/SmoothPageScroll/#six">Data Driven Recommendations</a></li>
+                          <!--<li><a href="/examples/SmoothPageScroll/#seven">Emailing Results and Scheduling the Model</a></li>-->
+                          <li><a href="/examples/SmoothPageScroll/#eight">Conclusion</a></li>
+                          <!--<li><a href="/examples/SmoothPageScroll/#forecast">Related Projects</a></li>-->
+                      </ul>
+                    </li>
+
+                  </ul> 
+              </nav> 
+            </div>
+          	</div>
+	<div class="wrapper" id="header">
+<p><br></p>
+<h1 align="center" style = "margin: 0;"><big>Super-Marketing Insights</big></h1>
+<header>
+    <hr class="star-light" style='background-color:transparent;'>
+</header>
+</div>
+<div class="wrapper">
+				<!-- Resolution 1 -->
+				<article id="one">
+      				<div class="center">
+              			<div>
+              				<h2>Goal</h2>
+                      <p>To obtain actionable insights from marketing data provided by a large European supermarket chain. The full python script for this work can be found <a target='_blank' href="python-code/">here</a>.</p>
+              			</div>
+              			<div class="left"></div>
+      				</div>  
+    			</article>  
+    			<!-- End Resolution 1 -->
+    
+				<!-- Resolution 2 -->
+				<article id="two">  
+          			
+         	 			<div class="center">  
+                <p><br></p>  
+            				<h2>Approach</h2>  
+                    <p>One way to attract new and existing customers to your store is through marketing efforts. Since resources are not infinite, it would be a good idea to predict what areas would be best to allocate our budget. In order to do this I aim to look at spending patterns and behavior to predict where customers travel from in order to shop at the stores. Overall it would be extremely beneficial to understand exactly where to spend marketing efforts to achieve greatest impact. This may be around the immediate vicinity to the stores, to across the whole city. 
+                    </p>
+                    <p><br></p>
+            				<div class="left">
+              					<div class="container">
+                					<div class="sideText2">
+                  						<span class="line"></span>
+                  						<p></p>
+                					</div>
+              					</div>
+              					
+            				</div>   
+         				</div>
+         			  
+      			</article>
+      			<!-- End Resolution 2 -->
+   
+	  			<!-- Resolution 3 -->
+	  			<article id="three" style="background: rgba(247, 247, 247, 0.3);">
+          			<div class="center">
+          				<p><br></p>
+
+        				<h2>Exploratory Data Analysis</h2>
+              				<p><br></p>
+                      <p>Exploratory data analysis is performed in python to get a general feel for the data. First the libraries are imported. The data contains geographical information about points of sale for products, thousands of customers and thousands of products. The original dataset was in the form of 3 tables:</p>
+                      <p>Supermarket_distances: three columns. The first column is the customer id, the second is the shop id and the third is the distance between the customer’s house and the shop location. The distance is a calculated in meters as a straight line so it does not take into account the road graph.</p>
+                      <p>Supermarket_prices: two columns. The first column is the product id and the second column is its unit price. The price is in Euro and it is calculated as the average unit price for the time span of the dataset.</p>
+                      <p>Supermarket_purchases: four columns. The first column is the customer id, the second is the product id, the third is the shop id and the fourth is the total amount of items that the customer bought the product in that particular shop. The data is recorded from January 2007 to December 2011.</p>
+                      <p>An aggregated version of the dataset is used, which is aggregated by customer, and info from different shops are pivoted to new column.</p>
+                      <pre class= "brush: python">import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy.spatial import Voronoi
+
+data = pd.read_csv('supermarket_data_aggr.csv')
+data.columns.values       
+                             </pre>
+                      <br>
+                      <div data-collapse>
+  <h4> Check Out first 30 rows &#9660;</h4>
+                      <div style="overflow:auto">
+                        <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>customer_id</th>
+      <th>avg_distance_to_shops</th>
+      <th>min_distance_to_shops</th>
+      <th>max_distance_to_shops</th>
+      <th>products_purchased</th>
+      <th>unique_products_purchased</th>
+      <th>amount_purchased</th>
+      <th>avg_purchase</th>
+      <th>avg_price</th>
+      <th>shops_used</th>
+      <th>distance_shop_1</th>
+      <th>distance_shop_2</th>
+      <th>distance_shop_3</th>
+      <th>distance_shop_4</th>
+      <th>distance_shop_5</th>
+      <th>products_purchased_shop_1</th>
+      <th>products_purchased_shop_2</th>
+      <th>products_purchased_shop_3</th>
+      <th>products_purchased_shop_4</th>
+      <th>products_purchased_shop_5</th>
+      <th>unique_products_purchased_shop_1</th>
+      <th>unique_products_purchased_shop_2</th>
+      <th>unique_products_purchased_shop_3</th>
+      <th>unique_products_purchased_shop_4</th>
+      <th>unique_products_purchased_shop_5</th>
+      <th>amount_purchased_shop_1</th>
+      <th>amount_purchased_shop_2</th>
+      <th>amount_purchased_shop_3</th>
+      <th>amount_purchased_shop_4</th>
+      <th>amount_purchased_shop_5</th>
+      <th>avg_purchase_shop_1</th>
+      <th>avg_purchase_shop_2</th>
+      <th>avg_purchase_shop_3</th>
+      <th>avg_purchase_shop_4</th>
+      <th>avg_purchase_shop_5</th>
+      <th>avg_price_shop_1</th>
+      <th>avg_price_shop_2</th>
+      <th>avg_price_shop_3</th>
+      <th>avg_price_shop_4</th>
+      <th>avg_price_shop_5</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>1434.91910</td>
+      <td>985.87620</td>
+      <td>4082.52220</td>
+      <td>3090</td>
+      <td>473</td>
+      <td>7551.7010</td>
+      <td>14.221659</td>
+      <td>3.150493</td>
+      <td>2</td>
+      <td>4082.5222</td>
+      <td>985.87620</td>
+      <td>2372.09700</td>
+      <td>4929.80470</td>
+      <td>3284.38670</td>
+      <td>109</td>
+      <td>2981</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>77</td>
+      <td>454</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>803.96800</td>
+      <td>6747.733</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>10.441143</td>
+      <td>14.862848</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>6.393403</td>
+      <td>2.600485</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>909.76764</td>
+      <td>254.94832</td>
+      <td>2295.48400</td>
+      <td>4508</td>
+      <td>486</td>
+      <td>7820.2190</td>
+      <td>11.235947</td>
+      <td>2.191422</td>
+      <td>4</td>
+      <td>1115.3433</td>
+      <td>2295.48400</td>
+      <td>670.90080</td>
+      <td>2048.06050</td>
+      <td>254.94832</td>
+      <td>150</td>
+      <td>470</td>
+      <td>29</td>
+      <td>0</td>
+      <td>3859</td>
+      <td>105</td>
+      <td>175</td>
+      <td>20</td>
+      <td>0</td>
+      <td>396</td>
+      <td>395.00400</td>
+      <td>848.526</td>
+      <td>50.932</td>
+      <td>0.000</td>
+      <td>6525.757</td>
+      <td>3.761943</td>
+      <td>4.848720</td>
+      <td>2.546600</td>
+      <td>0.000000</td>
+      <td>16.479185</td>
+      <td>2.851152</td>
+      <td>2.009863</td>
+      <td>2.059450</td>
+      <td>0.000000</td>
+      <td>2.103394</td>
+      
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>1498.94700</td>
+      <td>754.29560</td>
+      <td>2831.77270</td>
+      <td>814</td>
+      <td>234</td>
+      <td>1788.6130</td>
+      <td>5.453088</td>
+      <td>2.258994</td>
+      <td>4</td>
+      <td>1418.8348</td>
+      <td>2831.77270</td>
+      <td>1286.81900</td>
+      <td>1545.19630</td>
+      <td>754.29560</td>
+      <td>36</td>
+      <td>233</td>
+      <td>13</td>
+      <td>0</td>
+      <td>532</td>
+      <td>32</td>
+      <td>104</td>
+      <td>13</td>
+      <td>0</td>
+      <td>179</td>
+      <td>120.22600</td>
+      <td>582.939</td>
+      <td>25.004</td>
+      <td>0.000</td>
+      <td>1060.444</td>
+      <td>3.757062</td>
+      <td>5.605183</td>
+      <td>1.923385</td>
+      <td>0.000000</td>
+      <td>5.924268</td>
+      <td>3.426687</td>
+      <td>2.478529</td>
+      <td>1.923385</td>
+      <td>0.000000</td>
+      <td>1.947067</td>
+      
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>561.65900</td>
+      <td>362.79178</td>
+      <td>2210.38200</td>
+      <td>648</td>
+      <td>208</td>
+      <td>1679.5200</td>
+      <td>5.976940</td>
+      <td>2.614292</td>
+      <td>4</td>
+      <td>1104.3829</td>
+      <td>2210.38200</td>
+      <td>617.28710</td>
+      <td>2181.68530</td>
+      <td>362.79178</td>
+      <td>20</td>
+      <td>5</td>
+      <td>291</td>
+      <td>0</td>
+      <td>332</td>
+      <td>20</td>
+      <td>5</td>
+      <td>125</td>
+      <td>0</td>
+      <td>131</td>
+      <td>99.94800</td>
+      <td>13.442</td>
+      <td>628.648</td>
+      <td>0.000</td>
+      <td>937.482</td>
+      <td>4.997400</td>
+      <td>2.688400</td>
+      <td>5.029184</td>
+      <td>0.000000</td>
+      <td>7.156351</td>
+      <td>4.997400</td>
+      <td>2.688400</td>
+      <td>2.083168</td>
+      <td>0.000000</td>
+      <td>2.754427</td>
+      
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>605.36280</td>
+      <td>275.46753</td>
+      <td>1375.11840</td>
+      <td>13</td>
+      <td>10</td>
+      <td>17.9220</td>
+      <td>1.792200</td>
+      <td>1.692000</td>
+      <td>2</td>
+      <td>1913.7630</td>
+      <td>1375.11840</td>
+      <td>275.46753</td>
+      <td>2961.30350</td>
+      <td>1172.37730</td>
+      <td>0</td>
+      <td>6</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.00000</td>
+      <td>2.903</td>
+      <td>15.019</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000000</td>
+      <td>0.967667</td>
+      <td>2.145571</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.633667</td>
+      <td>2.145571</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>6</td>
+      <td>2603.69560</td>
+      <td>1972.48940</td>
+      <td>3697.23000</td>
+      <td>2783</td>
+      <td>620</td>
+      <td>6346.3850</td>
+      <td>7.059382</td>
+      <td>2.785088</td>
+      <td>4</td>
+      <td>3697.2300</td>
+      <td>1972.48940</td>
+      <td>2150.50020</td>
+      <td>4008.24120</td>
+      <td>2803.12500</td>
+      <td>771</td>
+      <td>1940</td>
+      <td>58</td>
+      <td>0</td>
+      <td>14</td>
+      <td>318</td>
+      <td>522</td>
+      <td>46</td>
+      <td>0</td>
+      <td>13</td>
+      <td>1996.82500</td>
+      <td>4199.332</td>
+      <td>124.429</td>
+      <td>0.000</td>
+      <td>25.799</td>
+      <td>6.279324</td>
+      <td>8.044698</td>
+      <td>2.704978</td>
+      <td>0.000000</td>
+      <td>1.984538</td>
+      <td>3.349176</td>
+      <td>2.525061</td>
+      <td>2.082261</td>
+      <td>0.000000</td>
+      <td>1.914615</td>
+      
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>7</td>
+      <td>2068.84280</td>
+      <td>2068.84280</td>
+      <td>2068.84280</td>
+      <td>20</td>
+      <td>19</td>
+      <td>47.1570</td>
+      <td>2.481947</td>
+      <td>2.355105</td>
+      <td>1</td>
+      <td>2068.8428</td>
+      <td>3894.64800</td>
+      <td>2406.57900</td>
+      <td>1058.40700</td>
+      <td>1779.98780</td>
+      <td>20</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>19</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>47.15700</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>2.481947</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>2.355105</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>8</td>
+      <td>1399.30570</td>
+      <td>245.44533</td>
+      <td>1679.82470</td>
+      <td>2601</td>
+      <td>322</td>
+      <td>6939.3570</td>
+      <td>18.071241</td>
+      <td>2.983021</td>
+      <td>3</td>
+      <td>1592.3120</td>
+      <td>1679.82470</td>
+      <td>245.44533</td>
+      <td>2702.43750</td>
+      <td>889.07140</td>
+      <td>19</td>
+      <td>2463</td>
+      <td>119</td>
+      <td>0</td>
+      <td>0</td>
+      <td>18</td>
+      <td>292</td>
+      <td>74</td>
+      <td>0</td>
+      <td>0</td>
+      <td>95.01100</td>
+      <td>6577.919</td>
+      <td>266.427</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>5.278389</td>
+      <td>22.527120</td>
+      <td>3.600365</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>5.227889</td>
+      <td>2.965092</td>
+      <td>2.507716</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>9</td>
+      <td>1789.29030</td>
+      <td>164.82315</td>
+      <td>3199.93870</td>
+      <td>7977</td>
+      <td>743</td>
+      <td>17245.0620</td>
+      <td>15.777733</td>
+      <td>3.072187</td>
+      <td>2</td>
+      <td>3199.9387</td>
+      <td>164.82315</td>
+      <td>1612.43440</td>
+      <td>4305.14900</td>
+      <td>2520.61940</td>
+      <td>3226</td>
+      <td>4751</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>585</td>
+      <td>508</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7532.67400</td>
+      <td>9712.388</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>12.876366</td>
+      <td>19.118874</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>3.339414</td>
+      <td>2.764455</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>10</td>
+      <td>1940.03210</td>
+      <td>968.77356</td>
+      <td>2437.86910</td>
+      <td>3810</td>
+      <td>552</td>
+      <td>8434.0100</td>
+      <td>11.553438</td>
+      <td>2.552993</td>
+      <td>3</td>
+      <td>2437.8691</td>
+      <td>1721.13270</td>
+      <td>968.77356</td>
+      <td>2920.71300</td>
+      <td>1544.03690</td>
+      <td>349</td>
+      <td>3460</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>224</td>
+      <td>505</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>882.56700</td>
+      <td>7551.109</td>
+      <td>0.334</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>3.940031</td>
+      <td>14.952691</td>
+      <td>0.334000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>2.632964</td>
+      <td>2.521915</td>
+      <td>0.334000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>11</td>
+      <td>524.23100</td>
+      <td>259.16165</td>
+      <td>2420.76100</td>
+      <td>3113</td>
+      <td>530</td>
+      <td>6332.2690</td>
+      <td>10.131630</td>
+      <td>2.379149</td>
+      <td>4</td>
+      <td>880.0106</td>
+      <td>2420.76100</td>
+      <td>841.09380</td>
+      <td>2024.43700</td>
+      <td>259.16165</td>
+      <td>25</td>
+      <td>75</td>
+      <td>25</td>
+      <td>0</td>
+      <td>2988</td>
+      <td>25</td>
+      <td>63</td>
+      <td>24</td>
+      <td>0</td>
+      <td>513</td>
+      <td>94.18900</td>
+      <td>162.305</td>
+      <td>57.736</td>
+      <td>0.000</td>
+      <td>6018.039</td>
+      <td>3.767560</td>
+      <td>2.576270</td>
+      <td>2.405667</td>
+      <td>0.000000</td>
+      <td>11.731070</td>
+      <td>3.767560</td>
+      <td>2.220556</td>
+      <td>2.275875</td>
+      <td>0.000000</td>
+      <td>2.335795</td>
+      
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>12</td>
+      <td>2147.43680</td>
+      <td>673.35510</td>
+      <td>4112.57900</td>
+      <td>6419</td>
+      <td>1035</td>
+      <td>18991.9160</td>
+      <td>11.406557</td>
+      <td>4.053608</td>
+      <td>5</td>
+      <td>1055.0522</td>
+      <td>4112.57900</td>
+      <td>2491.70950</td>
+      <td>673.35510</td>
+      <td>1567.29500</td>
+      <td>3948</td>
+      <td>2050</td>
+      <td>111</td>
+      <td>269</td>
+      <td>41</td>
+      <td>839</td>
+      <td>562</td>
+      <td>92</td>
+      <td>134</td>
+      <td>38</td>
+      <td>12311.51900</td>
+      <td>5807.680</td>
+      <td>206.033</td>
+      <td>584.042</td>
+      <td>82.643</td>
+      <td>14.674039</td>
+      <td>10.333950</td>
+      <td>2.239489</td>
+      <td>4.358522</td>
+      <td>2.174816</td>
+      <td>4.906844</td>
+      <td>3.681925</td>
+      <td>1.897837</td>
+      <td>2.309918</td>
+      <td>2.080079</td>
+      
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>13</td>
+      <td>3216.24170</td>
+      <td>2267.25320</td>
+      <td>5486.47400</td>
+      <td>1911</td>
+      <td>498</td>
+      <td>4841.1710</td>
+      <td>7.884644</td>
+      <td>2.922849</td>
+      <td>2</td>
+      <td>5486.4740</td>
+      <td>2267.25320</td>
+      <td>3894.54170</td>
+      <td>6573.49760</td>
+      <td>4812.33700</td>
+      <td>303</td>
+      <td>1608</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>181</td>
+      <td>433</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>837.71200</td>
+      <td>4003.459</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>4.628243</td>
+      <td>9.245864</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>2.916094</td>
+      <td>2.925672</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>14</td>
+      <td>2788.37520</td>
+      <td>2788.37520</td>
+      <td>2788.37520</td>
+      <td>66</td>
+      <td>55</td>
+      <td>217.1720</td>
+      <td>3.948582</td>
+      <td>3.398946</td>
+      <td>1</td>
+      <td>2788.3752</td>
+      <td>1722.64160</td>
+      <td>1982.52500</td>
+      <td>4276.99760</td>
+      <td>2530.89430</td>
+      <td>66</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>55</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>217.17200</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>3.948582</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>3.398946</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>15</td>
+      <td>2227.00440</td>
+      <td>413.81870</td>
+      <td>3547.42460</td>
+      <td>2174</td>
+      <td>497</td>
+      <td>4950.5150</td>
+      <td>7.558038</td>
+      <td>2.901656</td>
+      <td>2</td>
+      <td>3547.4246</td>
+      <td>413.81870</td>
+      <td>1859.77490</td>
+      <td>4492.73200</td>
+      <td>2783.41380</td>
+      <td>1233</td>
+      <td>941</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>379</td>
+      <td>276</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3065.78000</td>
+      <td>1884.735</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>8.089129</td>
+      <td>6.828750</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>3.348111</td>
+      <td>2.288591</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>16</td>
+      <td>632.81500</td>
+      <td>472.81192</td>
+      <td>3004.97140</td>
+      <td>4719</td>
+      <td>582</td>
+      <td>8757.4710</td>
+      <td>9.940375</td>
+      <td>2.292775</td>
+      <td>4</td>
+      <td>523.5660</td>
+      <td>3004.97140</td>
+      <td>1392.38670</td>
+      <td>1450.18460</td>
+      <td>472.81192</td>
+      <td>1065</td>
+      <td>16</td>
+      <td>173</td>
+      <td>0</td>
+      <td>3465</td>
+      <td>276</td>
+      <td>16</td>
+      <td>94</td>
+      <td>0</td>
+      <td>495</td>
+      <td>2225.78000</td>
+      <td>50.475</td>
+      <td>311.000</td>
+      <td>0.000</td>
+      <td>6170.216</td>
+      <td>8.064421</td>
+      <td>3.154687</td>
+      <td>3.308511</td>
+      <td>0.000000</td>
+      <td>12.465083</td>
+      <td>2.409304</td>
+      <td>3.154687</td>
+      <td>2.002330</td>
+      <td>0.000000</td>
+      <td>2.255097</td>
+      
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>17</td>
+      <td>2212.29930</td>
+      <td>2212.29930</td>
+      <td>2212.29930</td>
+      <td>16</td>
+      <td>14</td>
+      <td>222.8040</td>
+      <td>15.914572</td>
+      <td>15.550928</td>
+      <td>1</td>
+      <td>2212.2993</td>
+      <td>2842.32200</td>
+      <td>1604.52710</td>
+      <td>2043.00170</td>
+      <td>1469.51220</td>
+      <td>16</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>14</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>222.80400</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>15.914572</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>15.550928</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>18</td>
+      <td>2086.40330</td>
+      <td>2072.64010</td>
+      <td>2320.37870</td>
+      <td>46</td>
+      <td>35</td>
+      <td>135.3360</td>
+      <td>3.759333</td>
+      <td>2.527278</td>
+      <td>2</td>
+      <td>2320.3787</td>
+      <td>3381.39750</td>
+      <td>2072.64010</td>
+      <td>1751.77390</td>
+      <td>1735.56370</td>
+      <td>2</td>
+      <td>0</td>
+      <td>44</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>34</td>
+      <td>0</td>
+      <td>0</td>
+      <td>12.73100</td>
+      <td>0.000</td>
+      <td>122.605</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>6.365500</td>
+      <td>0.000000</td>
+      <td>3.606029</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>6.365500</td>
+      <td>0.000000</td>
+      <td>2.301500</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>19</td>
+      <td>1392.48660</td>
+      <td>1102.06950</td>
+      <td>3270.69340</td>
+      <td>3794</td>
+      <td>564</td>
+      <td>10448.0940</td>
+      <td>16.299679</td>
+      <td>3.244633</td>
+      <td>4</td>
+      <td>1356.0990</td>
+      <td>3270.69340</td>
+      <td>1695.16380</td>
+      <td>1102.06950</td>
+      <td>981.00530</td>
+      <td>3669</td>
+      <td>18</td>
+      <td>19</td>
+      <td>88</td>
+      <td>0</td>
+      <td>548</td>
+      <td>17</td>
+      <td>17</td>
+      <td>59</td>
+      <td>0</td>
+      <td>10198.02200</td>
+      <td>30.684</td>
+      <td>44.263</td>
+      <td>175.125</td>
+      <td>0.000</td>
+      <td>18.609530</td>
+      <td>1.804941</td>
+      <td>2.603706</td>
+      <td>2.968220</td>
+      <td>0.000000</td>
+      <td>3.444360</td>
+      <td>1.734353</td>
+      <td>2.117471</td>
+      <td>2.149491</td>
+      <td>0.000000</td>
+      
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>20</td>
+      <td>3832.20430</td>
+      <td>646.87744</td>
+      <td>3991.47070</td>
+      <td>21</td>
+      <td>21</td>
+      <td>94.1800</td>
+      <td>4.484762</td>
+      <td>4.484762</td>
+      <td>2</td>
+      <td>994.4090</td>
+      <td>3991.47070</td>
+      <td>2367.86570</td>
+      <td>646.87744</td>
+      <td>1444.90920</td>
+      <td>0</td>
+      <td>20</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>20</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.00000</td>
+      <td>92.043</td>
+      <td>0.000</td>
+      <td>2.137</td>
+      <td>0.000</td>
+      <td>0.000000</td>
+      <td>4.602150</td>
+      <td>0.000000</td>
+      <td>2.137000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>4.602150</td>
+      <td>0.000000</td>
+      <td>2.137000</td>
+      <td>0.000000</td>
+      
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>21</td>
+      <td>2704.01320</td>
+      <td>2287.20000</td>
+      <td>3334.07960</td>
+      <td>788</td>
+      <td>352</td>
+      <td>2217.7110</td>
+      <td>5.133590</td>
+      <td>3.014683</td>
+      <td>2</td>
+      <td>3334.0796</td>
+      <td>2287.20000</td>
+      <td>1980.04250</td>
+      <td>3459.66970</td>
+      <td>2452.73000</td>
+      <td>283</td>
+      <td>505</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>172</td>
+      <td>260</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>811.73900</td>
+      <td>1405.972</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>4.719413</td>
+      <td>5.407585</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>3.262674</td>
+      <td>2.850627</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>22</td>
+      <td>2715.74370</td>
+      <td>1722.64160</td>
+      <td>2788.37520</td>
+      <td>4324</td>
+      <td>613</td>
+      <td>12698.4210</td>
+      <td>19.506023</td>
+      <td>4.032550</td>
+      <td>3</td>
+      <td>2788.3752</td>
+      <td>1722.64160</td>
+      <td>1982.52500</td>
+      <td>4276.99760</td>
+      <td>2530.89430</td>
+      <td>4271</td>
+      <td>34</td>
+      <td>19</td>
+      <td>0</td>
+      <td>0</td>
+      <td>602</td>
+      <td>30</td>
+      <td>19</td>
+      <td>0</td>
+      <td>0</td>
+      <td>12584.54800</td>
+      <td>72.844</td>
+      <td>41.029</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>20.904564</td>
+      <td>2.428133</td>
+      <td>2.159421</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>4.190126</td>
+      <td>2.056833</td>
+      <td>2.159421</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>23</td>
+      <td>1048.76720</td>
+      <td>849.18590</td>
+      <td>4064.37400</td>
+      <td>1728</td>
+      <td>434</td>
+      <td>4039.5261</td>
+      <td>8.468608</td>
+      <td>2.768017</td>
+      <td>5</td>
+      <td>930.8029</td>
+      <td>4064.37400</td>
+      <td>2453.60200</td>
+      <td>849.18590</td>
+      <td>1530.49260</td>
+      <td>1675</td>
+      <td>14</td>
+      <td>10</td>
+      <td>16</td>
+      <td>13</td>
+      <td>428</td>
+      <td>11</td>
+      <td>10</td>
+      <td>15</td>
+      <td>13</td>
+      <td>3932.12600</td>
+      <td>22.969</td>
+      <td>20.753</td>
+      <td>40.838</td>
+      <td>22.840</td>
+      <td>9.187210</td>
+      <td>2.088091</td>
+      <td>2.075300</td>
+      <td>2.722533</td>
+      <td>1.756923</td>
+      <td>2.843615</td>
+      <td>1.770091</td>
+      <td>2.075300</td>
+      <td>2.680867</td>
+      <td>1.756923</td>
+      
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>24</td>
+      <td>1679.12780</td>
+      <td>1679.12780</td>
+      <td>1679.12780</td>
+      <td>57</td>
+      <td>48</td>
+      <td>153.3510</td>
+      <td>3.194812</td>
+      <td>2.426063</td>
+      <td>1</td>
+      <td>1679.1278</td>
+      <td>3814.60280</td>
+      <td>2251.79200</td>
+      <td>728.02350</td>
+      <td>1511.21660</td>
+      <td>57</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>48</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>153.35100</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>3.194812</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>2.426063</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>25</td>
+      <td>935.12040</td>
+      <td>935.12040</td>
+      <td>935.12040</td>
+      <td>68</td>
+      <td>54</td>
+      <td>238.9530</td>
+      <td>4.425056</td>
+      <td>3.380444</td>
+      <td>1</td>
+      <td>2732.0046</td>
+      <td>935.12040</td>
+      <td>1452.56840</td>
+      <td>4041.18580</td>
+      <td>2223.36450</td>
+      <td>0</td>
+      <td>68</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>54</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.00000</td>
+      <td>238.953</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000000</td>
+      <td>4.425056</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>3.380444</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>26</td>
+      <td>1615.13760</td>
+      <td>1529.30030</td>
+      <td>2203.95140</td>
+      <td>2171</td>
+      <td>410</td>
+      <td>5128.8150</td>
+      <td>11.448248</td>
+      <td>2.726190</td>
+      <td>2</td>
+      <td>2203.9514</td>
+      <td>1529.30030</td>
+      <td>611.39014</td>
+      <td>2886.74440</td>
+      <td>1325.90820</td>
+      <td>67</td>
+      <td>2104</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>57</td>
+      <td>391</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>243.94100</td>
+      <td>4884.874</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>4.279667</td>
+      <td>12.493284</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>3.727877</td>
+      <td>2.580164</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>27</td>
+      <td>1930.41170</td>
+      <td>1930.41170</td>
+      <td>1930.41170</td>
+      <td>251</td>
+      <td>119</td>
+      <td>516.3750</td>
+      <td>4.339286</td>
+      <td>2.067672</td>
+      <td>1</td>
+      <td>1930.4117</td>
+      <td>3205.29600</td>
+      <td>1786.06540</td>
+      <td>1528.08310</td>
+      <td>1355.77480</td>
+      <td>251</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>119</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>516.37500</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>4.339286</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>2.067672</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>28</td>
+      <td>421.13943</td>
+      <td>421.13943</td>
+      <td>421.13943</td>
+      <td>1910</td>
+      <td>342</td>
+      <td>3808.5100</td>
+      <td>11.135994</td>
+      <td>2.218047</td>
+      <td>1</td>
+      <td>2983.9956</td>
+      <td>421.13943</td>
+      <td>1294.70010</td>
+      <td>3945.34810</td>
+      <td>2219.00500</td>
+      <td>0</td>
+      <td>1910</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>342</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.00000</td>
+      <td>3808.510</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000000</td>
+      <td>11.135994</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>2.218047</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>29</td>
+      <td>2769.95020</td>
+      <td>527.75867</td>
+      <td>3465.80270</td>
+      <td>45</td>
+      <td>36</td>
+      <td>96.9650</td>
+      <td>2.551711</td>
+      <td>2.223132</td>
+      <td>2</td>
+      <td>3465.8027</td>
+      <td>527.75867</td>
+      <td>1757.64220</td>
+      <td>4349.35640</td>
+      <td>2673.96020</td>
+      <td>36</td>
+      <td>9</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>29</td>
+      <td>9</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>76.02700</td>
+      <td>20.938</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>2.621621</td>
+      <td>2.326444</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>2.191069</td>
+      <td>2.326444</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>30</td>
+      <td>2171.87500</td>
+      <td>1977.30990</td>
+      <td>3650.57080</td>
+      <td>134</td>
+      <td>81</td>
+      <td>356.6680</td>
+      <td>4.147302</td>
+      <td>2.815512</td>
+      <td>2</td>
+      <td>1977.3099</td>
+      <td>3650.57080</td>
+      <td>2177.32370</td>
+      <td>1182.22620</td>
+      <td>1597.41040</td>
+      <td>124</td>
+      <td>10</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>76</td>
+      <td>10</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>339.83398</td>
+      <td>16.834</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>4.471500</td>
+      <td>1.683400</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>2.964474</td>
+      <td>1.683400</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      s
+    </tr>
+  </tbody>
+</table>
+
+</div>
+                      </div>
+                      <p><br></p>
+                      <h3>Summary Statistics</h3>
+                      <p>Statistics showing the health and popularity of the 5 stores are shown below. This includes totals revenues, and average purchases per customer for the entire dataset. Since customers that don't shop at a store have zero values in the relevant columns, the means from the columns are calculated for all the nonzero values. This way we get a better estimate of the actions of only the customers that shop at the stores. </p>
+                      <br>
+                <pre class= "brush: python">def col_mean(datacols):
+    '''
+    returns the mean of the column not indluding the zeros
+    '''
+    result = []
+    for column in datacols:
+        nonzeros = datacols[datacols[column]>0][column]
+        result.append(nonzeros.mean(axis = 0))
+    return result
+
+total_purchased = data[['amount_purchased_shop_1','amount_purchased_shop_2', 
+                        'amount_purchased_shop_3', 'amount_purchased_shop_4',
+                        'amount_purchased_shop_5']].sum(axis=0)
+
+                        
+Avg_purchase = col_mean(data[['amount_purchased_shop_1','amount_purchased_shop_2',
+                              'amount_purchased_shop_3','amount_purchased_shop_4',
+                              'amount_purchased_shop_5']])        
+        
+Avg_products = col_mean(data[['products_purchased_shop_1','products_purchased_shop_2',
+                              'products_purchased_shop_3','products_purchased_shop_4',
+                              'products_purchased_shop_5']])        
+
+Avg_unique_products = col_mean(data[['unique_products_purchased_shop_1','unique_products_purchased_shop_2',
+                                     'unique_products_purchased_shop_3','unique_products_purchased_shop_4',
+                                     'unique_products_purchased_shop_5']])        
+                             </pre>
+                             <p><br></p>
+                <table class="table table-hover" style = "width:100%; font-size:120%; font-align:center;">
+                    <tr><th></th><th>Store 1</th><th>Store 2</th><th>Store 3</th><th>Store 4</th><th>Store 5</th></tr>
+                    <tr><th>Total Revenue (Millions &euro;)</th><td>139.471</td><td>82.900</td><td>18.306</td><td>6.659</td><td>8.338</td></tr>
+                    <tr><th>Average Customer Purchased (&euro;)</th><td>2510.64</td><td>1850.70</td><td>892.87</td><td>640.30</td><td>671.20</td></tr>
+                    <tr><th>Average Number of Products Purchased</th><td>964.75</td><td>815.81</td><td>461.29</td><td>328.80</td><td>350.75</td></tr>
+                    <tr><th>Average Number of Unique Products Purchased</th><td>241.56</td><td>170.63</td><td>93.95</td><td>67.15</td><td>76.62</td></tr>   
+                </table>
+                <br>
+                <p>We can see from the able that store 1 has much higher numbers that the other stores, indicating greater popularity.</p>
+                <p>This can also be shown in box plot form, which will also provide us with information on the distribution.</p>
+                <pre class= "brush: python">def boxplots(datacols, ylim, ylabel):
+    '''
+    creates boxplot removing zeros from the column
+    '''
+    i = 1
+    plt.figure()
+    numcols = len(datacols.columns.values)
+    colours = ['#c0392b', "#1abc9c", "#8e44ad", "#d35400", "#f1c40f"]
+    for column in datacols:
+        plt.subplot(1, numcols, i)
+        g = sns.boxplot(order=column, y = np.log(datacols[datacols[column]>0][column]),orient='v',
+                        color = colours[i-1])
+        plt.title("Shop" +str(i), size = 20)
+        plt.ylim(ylim)
+        if i == 1:
+            plt.ylabel("log(" + ylabel + ")", size = 20)
+            plt.yticks(size = 15)
+            sns.despine(top=True, right = True, bottom=True)
+        else:
+            plt.ylabel("")
+            g.set(yticklabels=[])
+            sns.despine(top=True, right = True, left=True, bottom=True)
+        i += 1
+
+def plot_hists(datacols, xlab = '', log = False):
+    '''
+    plots histograms removing the zeros for each column
+    '''
+    colours = ['#c0392b', "#1abc9c", "#8e44ad", "#d35400", "#f1c40f"]
+    labels = ['Store 1', 'Store 2', 'Store 3', 'Store 4', 'Store 5']
+    data = []
+    for column in datacols:
+        nonzeros = datacols[datacols[column]>0][column]
+        data.append(nonzeros)
+    plt.figure()
+    plt.hist(data, log = True, color = colours[:len(data)], label = labels[:len(data)])
+    sns.despine(); plt.legend(fontsize = 20); 
+    plt.xticks(size = 18); plt.xlabel(xlab, size = 20)
+    plt.yticks(size = 18); plt.ylabel('Count', size = 20)
+
+
+# Create box plots
+boxplots(data[['amount_purchased_shop_1','amount_purchased_shop_2', 
+               'amount_purchased_shop_3', 'amount_purchased_shop_4', 
+               'amount_purchased_shop_5']], ylim=(-2,12), 
+                ylabel='Amount Purchased')
+
+boxplots(data[['products_purchased_shop_1','products_purchased_shop_2', 
+               'products_purchased_shop_3', 'products_purchased_shop_4', 
+               'products_purchased_shop_5']], ylim=(-1,11), 
+                ylabel='Products Purchased')
+
+boxplots(data[['unique_products_purchased_shop_1','unique_products_purchased_shop_2', 
+               'unique_products_purchased_shop_3', 'unique_products_purchased_shop_4', 
+               'unique_products_purchased_shop_5']], ylim=(-1, 8), 
+                ylabel='Unique Products Purchased')
+
+# Create hists =============
+plot_hists(data[['amount_purchased_shop_1','amount_purchased_shop_2', 
+               'amount_purchased_shop_3', 'amount_purchased_shop_4', 
+               'amount_purchased_shop_5']], xlab = 'Amount Purchased', log=True)
+
+plot_hists(data[['products_purchased_shop_1','products_purchased_shop_2', 
+               'products_purchased_shop_3', 'products_purchased_shop_4', 
+               'products_purchased_shop_5']], xlab = 'Products Purchased', log=True)
+
+plot_hists(data[['products_purchased_shop_1','products_purchased_shop_2', 
+               'products_purchased_shop_3', 'products_purchased_shop_4', 
+               'products_purchased_shop_5']], xlab = 'Unique Products Purchased', log=True)
+
+                </pre>
+                <p><br></p>
+                <p>Click through the tabs to examine the various distributions. The boxplots use a log scales because of the highly skewness of the data.</p>
+                <p><br></p>
+                      <!--<div data-collapse>-->
+                        <ul class="tab">
+                          <li><a href="javascript:void(0)" class="tablinks" onclick="openPlot(event, 'London')" id="defaultOpen">Average Purchase</a></li>
+                          <li><a href="javascript:void(0)" class="tablinks" onclick="openPlot(event, 'Paris')">Average Number of Products Purchased</a></li>
+                          <li><a href="javascript:void(0)" class="tablinks" onclick="openPlot(event, 'Tokyo')">Average Number of Unique Products</a></li>
+                        </ul>
+
+                        <div id="London" class="tabcontent">
+                          <h3>Average Purchase</h3>
+                          <div class = 'row'>
+                            <div class='col-sm-6' >
+                              <center><img src="figs/amount_puchased_bp.png" width="95%"></center>
+                            </div>
+                            <div class='col-sm-6' >
+                              <center><img src="figs/amount_puchased_hist.png" width="95%"></center>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div id="Paris" class="tabcontent">
+                          <h3>Average Number of Products Purchased</h3>
+                          <div class='row'>
+                            <div class = "col-sm-6">
+                              <center><img src="figs/products_puchased_bp.png" width="95%"></center>
+                            </div>
+                            <div class = "col-sm-6">
+                              <center><img src="figs/products_puchased_hist.png" width="95%"></center>
+                            </div>
+                          </div>
+                          
+                        </div>
+
+                        <div id="Tokyo" class="tabcontent">
+                          <h3>Average Number of Unique Products</h3>
+                          <div class = 'row'>
+                            <div class = 'col-sm-6'>
+                              <center><img src="figs/unique_products_puchased_bp.png" width="95%"></center>
+                            </div>
+                            <div class = 'col-sm-6'>
+                              <center><img src="figs/unique_products_puchased_hist.png" width="95%"></center>
+                            </div>
+                          </div>
+                          
+                        </div>
+<p><br></p>
+<h3>Distance Metrics</h3>
+<p>We can calculate various distance metrics on the data to provide an understanding on how far people travel to the stores.</p>
+<pre class = "brush: python">def dist_metrics(datacols):
+    '''
+    returns the mean of the column not indluding the zeros
+    '''
+    means, medians, stds = [], [], []
+    for column in datacols:
+        nonzeros = datacols[datacols[column]>0][column]
+        means.append(nonzeros.mean(axis = 0))
+        medians.append(nonzeros.median(axis = 0))
+        stds.append(nonzeros.std(axis = 0))
+    return means, medians, stds
+
+mns, mds, stds = dist_metrics(data[['distance_shop_1','distance_shop_2',
+                                     'distance_shop_3','distance_shop_4',
+                                     'distance_shop_5']])        
+</pre>
+<p><br></p>
+<table class="table table-hover" style = "width:100%; font-size:160%; font-align:center;">
+                    <tr><th></th><th>Mean (km)</th><th>Median (km)</th><th>Standard Deviation (km)</th></tr>
+                    <tr><th>Store 1</th><td>2.496</td><td>2.289</td><td>1.282</td></tr>
+                    <tr><th>Store 2</th><td>2.488</td><td>2.355</td><td>1.417</td></tr>
+                    <tr><th>Store 3</th><td>1.924</td><td>1.746</td><td>1.158</td></tr>
+                    <tr><th>Store 4</th><td>2.882</td><td>2.704</td><td>1.730</td></tr>   
+                    <tr><th>Store 5</th><td>2.020</td><td>1.853</td><td>1.261</td></tr>   
+                </table>
+                <p><br></p>
+<h3>Triangulating customers</h3>
+<p>Observing where customers travel from to get to the stores gives us an insight to how they might shop.</p>
+<p>Since the customer distances to the store are known, we can approximate the distances between two stores by assuming that the angle between the line connecting the two stores and a line connecting one of the stores is uniformly randomly distributed.</p>
+<p>From the law of cosines we get that:</p>
+<div style="text-align: center;">
+<p><span class="math"> \( C^2 = A^2+B^2-2AB\cos\theta_c\) </span></p>  
+</div>
+<p>Here C represent the distance between the two stores, A, is the distance between one of the stores and the customer, B is the distance between the other store and the customer and <span class="math"> \(\theta_c\)</span> is the angle between the two vectors from the customer to both stores. </p>
+<p>We note that when <span class="math"> \(\theta_c\)</span> is around 0 or 180<sup>o</sup>, C=A+B or C=A-B, by taking <span class="math"> \(Max(Abs(A-B))\)</span> over all 60,366 observations, we are very likely to have a customer located such that <span class="math"> \(\theta_c=0 or 180\)</span>, and a good estimation for the distances between two stores can be achieved.</p>
+<p>Once the distances between stores is known, triangulation of the customers can be determined since the distance from their location to each of the 5 stores is known. Since triangulation uses only 3 stores we will use only stores 1, 2, and 3. We first perform a guess using the distance to two stores, that will give us two possible x-y coordinates for the customer location, (think of the intersection of two circles will always intersect twice), and we confirm which one of the points is correct from the distance to the third.</p>
+<br>
+<pre class= "brush: python">def get_theta_1i2(dist_i1, dist_i2):
+    '''
+    Gets the angle between three points using the law of cosines
+    '''
+    return np.arccos(((dist_i1)**2+(d12)**2-(dist_i2)**2)/float(2*d12*dist_i1))
+    
+def check_with_third(pt, known_pt, known_dist):
+    '''
+    Checks with a third, known point, calculates squared distance error
+    '''
+    dist1 = np.sqrt((pt[0]-known_pt[0])**2+(pt[1]-known_pt[1])**2)
+    dist2 = np.sqrt((pt[0]-known_pt[0])**2+(-pt[1]-known_pt[1])**2)
+    
+    dist_err1 = np.abs(known_dist-dist1)
+    dist_err2 = np.abs(known_dist-dist2)
+    #print(known_dist, dist1, dist2)
+    if dist_err1 < dist_err2:
+        return pt
+    else:
+        return (pt[0], -pt[1])
+
+    
+def get_xy(dist_i1, dist_i2, pm = 1):
+    '''
+    gets x and y coordinates
+    '''
+    theta = pm*get_theta_1i2(dist_i1, dist_i2)
+    return (dist_i1*np.cos(theta), dist_i1*np.sin(theta))
+    
+
+def triangulate(dist_i1, dist_i2, dist_i3):
+    '''
+    triangulates point, given distance to three known points 
+    '''
+    xy_guess = get_xy(dist_i1, dist_i2)
+    return check_with_third(xy_guess, shop_3, dist_i3)
+
+# Configure triangulation =======================================================
+# distances between each stores
+d12 = max(abs(data.distance_shop_2-data.distance_shop_1))
+d13 = max(abs(data.distance_shop_3-data.distance_shop_1))
+d14 = max(abs(data.distance_shop_4-data.distance_shop_1))
+d15 = max(abs(data.distance_shop_5-data.distance_shop_1))
+d23 = max(abs(data.distance_shop_3-data.distance_shop_2))
+d24 = max(abs(data.distance_shop_4-data.distance_shop_2))
+d25 = max(abs(data.distance_shop_5-data.distance_shop_2))
+d34 = max(abs(data.distance_shop_4-data.distance_shop_3))
+d35 = max(abs(data.distance_shop_5-data.distance_shop_3))
+d45 = max(abs(data.distance_shop_5-data.distance_shop_4))
+
+    
+shop_1 = (0, 0)
+shop_2 = (d12, 0)
+shop_3 = get_xy(d13, d23)
+shop_4 = triangulate(d14, d24, d34)
+shop_5 = triangulate(d15, d25, d35)
+shop_points = [list(shop_1), list(shop_2), list(shop_3), list(shop_4), list(shop_5)]
+
+data['x_coord'] = data.apply(lambda row: triangulate(row.distance_shop_1, row.distance_shop_2, row.distance_shop_3)[0], axis = 1)
+data['y_coord'] = data.apply(lambda row: triangulate(row.distance_shop_1, row.distance_shop_2, row.distance_shop_3)[1], axis = 1)
+</pre>
+<p>Here, we have assumed store 1 lies at the origin, store 2 lies on the x-axis, and store 3 is in the positive y-region. To superimpose the map we get with real life we may have to reflect around the x axis and rotate around the origin.</p>
+<p><br></p>
+<h3>One store customers</h3>
+<p>A one store customer is a customer that has only visited one store throughout the course of the dataset.</p>
+<p>We can examine the habits of shoppers who only visit one store, as it may be useful for generalization. </p>
+<p>We can see what is the closest store to a given shopper by using a Voronoi diagram.</p>
+<p><br></p>
+<pre class = 'brush: python'>def plot_stores(marker_size = 300, k=False):
+    '''
+    plots stores on map with a star
+    '''
+    if k:
+        colours = ['#000000', "#000000", "#000000", "#000000", "#000000"]
+    else:
+        colours = ['#c0392b', "#1abc9c", "#8e44ad", "#3498db", "#f1c40f"]
+    plt.scatter(shop_1[0], shop_1[1], s = marker_size, marker= "*", color = colours[0])
+    plt.scatter(shop_2[0], shop_2[1], s = marker_size, marker= "*", color = colours[1])
+    plt.scatter(shop_3[0], shop_3[1], s = marker_size, marker= "*", color = colours[2])
+    plt.scatter(shop_4[0], shop_4[1], s = marker_size, marker= "*", color = colours[3])
+    plt.scatter(shop_5[0], shop_5[1], s = marker_size, marker= "*", color = colours[4])
+
+def voronoi_finite_polygons_2d(vor, radius=None):
+    """
+    Reconstruct infinite voronoi regions in a 2D diagram to finite
+    regions.
+
+    Parameters
+    ----------
+    vor : Voronoi
+        Input diagram
+    radius : float, optional
+        Distance to 'points at infinity'.
+
+    Returns
+    -------
+    regions : list of tuples
+        Indices of vertices in each revised Voronoi regions.
+    vertices : list of tuples
+        Coordinates for revised Voronoi vertices. Same as coordinates
+        of input vertices, with 'points at infinity' appended to the
+        end.
+
+    """
+
+    if vor.points.shape[1] != 2:
+        raise ValueError("Requires 2D input")
+
+    new_regions = []
+    new_vertices = vor.vertices.tolist()
+
+    center = vor.points.mean(axis=0)
+    if radius is None:
+        radius = vor.points.ptp().max() *10
+
+    # Construct a map containing all ridges for a given point
+    all_ridges = {}
+    for (p1, p2), (v1, v2) in zip(vor.ridge_points, vor.ridge_vertices):
+        all_ridges.setdefault(p1, []).append((p2, v1, v2))
+        all_ridges.setdefault(p2, []).append((p1, v1, v2))
+
+    # Reconstruct infinite regions
+    for p1, region in enumerate(vor.point_region):
+        vertices = vor.regions[region]
+
+        if all(v >= 0 for v in vertices):
+            # finite region
+            new_regions.append(vertices)
+            continue
+
+        # reconstruct a non-finite region
+        ridges = all_ridges[p1]
+        new_region = [v for v in vertices if v >= 0]
+
+        for p2, v1, v2 in ridges:
+            if v2 < 0:
+                v1, v2 = v2, v1
+            if v1 >= 0:
+                # finite ridge: already in the region
+                continue
+
+            # Compute the missing endpoint of an infinite ridge
+
+            t = vor.points[p2] - vor.points[p1] # tangent
+            t /= np.linalg.norm(t)
+            n = np.array([-t[1], t[0]])  # normal
+
+            midpoint = vor.points[[p1, p2]].mean(axis=0)
+            direction = np.sign(np.dot(midpoint - center, n)) * n
+            far_point = vor.vertices[v2] + direction * radius*10
+
+            new_region.append(len(new_vertices))
+            new_vertices.append(far_point.tolist())
+
+        # sort region counterclockwise
+        vs = np.asarray([new_vertices[v] for v in new_region])
+        c = vs.mean(axis=0)
+        angles = np.arctan2(vs[:,1] - c[1], vs[:,0] - c[0])
+        new_region = np.array(new_region)[np.argsort(angles)]
+
+        # finish
+        new_regions.append(new_region.tolist())
+
+    return new_regions, np.asarray(new_vertices)
+
+# Plot one store closest ===========================================
+# voronoi 
+vor = Voronoi(shop_points)
+
+# plot
+regions, vertices = voronoi_finite_polygons_2d(vor)
+plt.figure()
+colours = ['#c0392b', "#1abc9c", "#8e44ad", "#3498db", "#f1c40f"]
+# colorize
+for i, region in enumerate(regions):
+    polygon = vertices[region]
+    plt.fill(*zip(*polygon), alpha=0.3, color = colours[i])
+plt.xlim(-6000, 6000); plt.ylim(-4000, 4000)
+
+shop1_shoppers = data[(data.shops_used == 1) & (data.products_purchased_shop_1>0)][['x_coord', 'y_coord']]
+shop2_shoppers = data[(data.shops_used == 1) & (data.products_purchased_shop_2>0)][['x_coord', 'y_coord']]
+shop3_shoppers = data[(data.shops_used == 1) & (data.products_purchased_shop_3>0)][['x_coord', 'y_coord']]
+shop4_shoppers = data[(data.shops_used == 1) & (data.products_purchased_shop_4>0)][['x_coord', 'y_coord']]
+shop5_shoppers = data[(data.shops_used == 1) & (data.products_purchased_shop_5>0)][['x_coord', 'y_coord']]
+
+plt.scatter(shop1_shoppers.x_coord, shop1_shoppers.y_coord, color = colours[0])
+plt.scatter(shop2_shoppers.x_coord, shop2_shoppers.y_coord, color = colours[1])
+plt.scatter(shop3_shoppers.x_coord, shop3_shoppers.y_coord, color = colours[2])
+plt.scatter(shop4_shoppers.x_coord, shop4_shoppers.y_coord, color = colours[3])
+plt.scatter(shop5_shoppers.x_coord, shop5_shoppers.y_coord, color = colours[4])
+
+plot_stores(k=True)
+plot_stores(marker_size = 150)
+plt.xticks(np.linspace(-6000,6000,7), ['-6', '-4', '-2', '0', '2', '4', '6'], size = 20)
+plt.xlabel('km', size = 25); plt.ylabel('km', size = 25)
+plt.yticks(np.linspace(-4000,4000,5), ['-4', '-2', '0', '2', '4'], size = 20)
+plt.title('Shop Used By 1-Shop Shoppers', size = 30)
+
+labels = ['Shop 1', 'Shop 2','Shop 3','Shop 4','Shop 5']
+dummies = [plt.plot([], [], ls='-', c=c)[0] for c in colours]        
+plt.legend(dummies, labels, fontsize = 18)
+</pre>
+<p><br></p>
+<p>We compare the store which the customer visits, given by the colored point, to the store which is geographically closest. The stars indicate the location of the shops.</p>
+
+<p><br></p>
+<center><img src="figs/closest_store.png" width = "100%"></center>
+<p><br></p>
+<p>Not surprisingly we see a large concentration of customers visiting the shops that are geographically closest to them.</p>
+<p>Though interestingly we see that there is a large number of customers from store 1 that appear all over the map. Whereas the customers of stores 3 and 5 mostly exist within the Voronoi region, i.e., the closest store to them.</p>
+<p><br></p>
+</div>
+            </article>
+          <!-- End Resolution 3 -->
+      
+          <!-- Resolution 4 -->
+          <article id="four">
+            <div class = 'center' style="position: relative;">
+                <p><br></p>
+<h2>Spending Patterns</h2>            
+<p>For all customers, (including those that shop at multiple shops), we can see how their spending pattern as a function of distance using a 2D histogram, which is weighted by the customers purchases. This way we don't simply count the number of customers of the store, but take into account their spending. By doing this we see the flow of spending into the store.</p>
+<p><br></p>
+<div data-collapse>
+  <h4> Plotting code here &#9660;</h4>
+                           <div>
+<pre class = 'brush: python'># Average puchase ==============================
+plt.figure(); plt.clf()
+plt.subplot(2,3,1)
+plt.hexbin(data.x_coord/1000, data.y_coord/1000, np.log(data.avg_purchase_shop_1), 
+           cmap = plt.cm.YlGn, vmax = 5)
+plt.scatter(shop_points[0][0]/1000, shop_points[0][1]/1000, marker = '*', s = 150)
+plt.xlim(-6, 6); plt.ylim(-4, 4); plt.title('Shop 1', size = 25);sns.despine(top = True, bottom = True, left = False, right = True)
+plt.xticks(size = 0); plt.yticks(size = 18); plt.ylabel('km', size = 20)
+
+plt.subplot(2,3,2)
+plt.hexbin(data.x_coord/1000, data.y_coord/1000, np.log(data.avg_purchase_shop_2), 
+           cmap = plt.cm.YlGn, vmax = 5)
+plt.scatter(shop_points[1][0]/1000, shop_points[1][1]/1000, marker = '*', s = 150)
+plt.xlim(-6, 6); plt.ylim(-4, 4); plt.title('Shop 2', size = 25);sns.despine(top = True, bottom = True, left = True, right = True)
+plt.xticks(size = 0); plt.yticks(size = 0);
+
+plt.subplot(2,3,3)
+plt.hexbin(data.x_coord/1000, data.y_coord/1000, np.log(data.avg_purchase_shop_3), 
+           cmap = plt.cm.YlGn, vmax = 5)
+plt.scatter(shop_points[2][0]/1000, shop_points[2][1]/1000, marker = '*', s = 150)
+plt.xlim(-6, 6); plt.ylim(-4, 4); plt.title('Shop 3', size = 25);sns.despine(top = True, bottom = False, left = True, right = True)
+plt.xticks(size = 0); plt.yticks(size = 0);
+
+plt.subplot(2,3,4)
+plt.hexbin(data.x_coord/1000, data.y_coord/1000, np.log(data.avg_purchase_shop_4), 
+           cmap = plt.cm.YlGn, vmax = 5)
+plt.scatter(shop_points[3][0]/1000, shop_points[3][1]/1000, marker = '*', s = 150)
+plt.xlim(-6, 6); plt.ylim(-4, 4); plt.title('Shop 4', size = 25);sns.despine(top = True, bottom = False, left = False, right = True)
+plt.xticks(size = 18); plt.yticks(size = 18); plt.xlabel('km', size =20); plt.ylabel('km', size = 20)
+
+plt.subplot(2,3,5)
+plt.hexbin(data.x_coord/1000, data.y_coord/1000, np.log(data.avg_purchase_shop_5), 
+           cmap = plt.cm.YlGn, vmax = 5)
+s = plt.scatter(shop_points[4][0]/1000, shop_points[4][1]/1000, marker = '*', s = 150)
+plt.xlim(-6, 6); plt.ylim(-4, 4); plt.title('Shop 5', size = 25);sns.despine(top = True, bottom = False, left = True, right = True);
+plt.xticks(size = 18); plt.yticks(size = 0); plt.xlabel('km', size= 20)
+
+plt.subplot(2,3,6); sns.despine(top = True, bottom = True, left = True, right = True);
+plt.xticks(size = 0); plt.yticks(size = 0);
+m = plt.cm.ScalarMappable(cmap=plt.cm.YlGn)
+m.set_array(np.linspace(0,5,20))
+plt.colorbar(m)
+</pre>
+</div>
+</div>
+<p><br></p>
+<center><h3>Log(Average Spending)</h3></center>
+<center><img src="figs/log_avg_purchase.svg" width="100%"></center>
+<p><br></p> 
+<p>From the above figure we can see that the spending across the city is roughly uniform for stores 1 and 4, indicating that customers come form all over the city. Stores 2, 3, and 5 are more localized, indicating that customers use those store because of their close proximity.</p>
+<div class="left">     	
+	<div class="container">
+		<div class="sideText3">
+				<span class="line"></span>
+				<p></p>
+		</div>
+	</div>	   
+
+</div>
+      					
+<p><br></p>
+				</article>
+  				<!-- End Resolution 4 --> 
+  
+  				<!-- Resolution 5 --> 
+    			<article id="five" style="background: rgba(247, 247, 247, 0.3);">
+      				<div class="center">      
+      					<p><br></p>
+          				<h2>The Spend Radius</h2>
+                  <p>I define a spend radius as the total amount spent within a given radius. This gives us an idea on where the customers are coming from and how much they are spending at the stores. This may provide insight on where to focus our marketing efforts, for example if many customers are close to the store then we shouldn't aim our marketing for the store all across the city, but around the store itself.</p>
+                  <pre class="brush: python">radiuss = np.linspace(10, 4000, 400)
+s1, s2, s3, s4, s5 = [], [], [], [], []
+cc1, cc2, cc3, cc4, cc5 = [], [], [], [], []
+for radius in radiuss:
+    s1.append(data[np.sqrt((data.x_coord - shop_1[0])**2+(data.y_coord - shop_1[1])**2)radius]['amount_purchased_shop_1'].sum(axis = 0))
+    s2.append(data[np.sqrt((data.x_coord - shop_2[0])**2+(data.y_coord - shop_2[1])**2)radius]['amount_purchased_shop_2'].sum(axis = 0))
+    s3.append(data[np.sqrt((data.x_coord - shop_3[0])**2+(data.y_coord - shop_3[1])**2)radius]['amount_purchased_shop_3'].sum(axis = 0))
+    s4.append(data[np.sqrt((data.x_coord - shop_4[0])**2+(data.y_coord - shop_4[1])**2)radius]['amount_purchased_shop_4'].sum(axis = 0))
+    s5.append(data[np.sqrt((data.x_coord - shop_5[0])**2+(data.y_coord - shop_5[1])**2)radius]['amount_purchased_shop_5'].sum(axis = 0))
+
+    # Customer count
+    cc1.append(data[np.sqrt((data.x_coord - shop_1[0])**2+(data.y_coord - shop_1[1])**2)radius].shape[0])
+    cc2.append(data[np.sqrt((data.x_coord - shop_2[0])**2+(data.y_coord - shop_2[1])**2)radius].shape[0])
+    cc3.append(data[np.sqrt((data.x_coord - shop_3[0])**2+(data.y_coord - shop_3[1])**2)radius].shape[0])
+    cc4.append(data[np.sqrt((data.x_coord - shop_4[0])**2+(data.y_coord - shop_4[1])**2)radius].shape[0])
+    cc5.append(data[np.sqrt((data.x_coord - shop_5[0])**2+(data.y_coord - shop_5[1])**2)radius].shape[0])
+    
+    
+plt.figure(); plt.clf()
+plt.subplot(1,2,1)
+plt.plot(radiuss, s1, color = colours[0], label = 'Store 1')
+plt.plot(radiuss, s2, color = colours[1], label = 'Store 2')
+plt.plot(radiuss, s3, color = colours[2], label = 'Store 3')
+plt.plot(radiuss, s4, color = colours[3], label = 'Store 4')
+plt.plot(radiuss, s5, color = colours[4], label = 'Store 5')
+sns.despine(); plt.xticks(np.linspace(0, 4000, 5), ['0', '1', '2', '3', '4'], size = 18); plt.xlabel('Radius (km)', size = 20)
+plt.yticks(size = 18); plt.title('Total Euros Spent', size = 25); plt.legend(fontsize = 18, loc= 2)
+#normalized
+plt.subplot(1,2,2)
+plt.plot(radiuss, np.asarray(s1)/(data['amount_purchased_shop_1'].sum(axis = 0)), color = colours[0], label = 'Store 1')
+plt.plot(radiuss, np.asarray(s2)/(data['amount_purchased_shop_2'].sum(axis = 0)), color = colours[1], label = 'Store 2')
+plt.plot(radiuss, np.asarray(s3)/(data['amount_purchased_shop_3'].sum(axis = 0)), color = colours[2], label = 'Store 3')
+plt.plot(radiuss, np.asarray(s4)/(data['amount_purchased_shop_4'].sum(axis = 0)), color = colours[3], label = 'Store 4')
+plt.plot(radiuss, np.asarray(s5)/(data['amount_purchased_shop_5'].sum(axis = 0)), color = colours[4], label = 'Store 5')
+sns.despine(); plt.xticks(np.linspace(0, 4000, 5), ['0', '1', '2', '3', '4'], size = 18); plt.xlabel('Radius (km)', size = 20)
+plt.yticks(size = 18); plt.title('Normalized Total Spent', size = 25); plt.legend(fontsize = 18, loc= 4)
+</pre>
+<br>
+<p></p>
+<br>
+
+    <center><img src="figs/spend_radius.png" width =  "95%"></center>
+		<p><br></p>
+    <p>Here we can see that stores 3, 4, and 5 have spend radius' that plateau quite quickly, which is further indication that spending is localized around the store. For store 1, and partly store 2, the spend radius has quite a different profile. For store 1, I hypothesize because of it's popularity, it has customers from all over the city. For store 2 it maybe because of its location, it is on the edge of the city, segregated by what seems to be a natural water feature such as a river. Because of this, it may the closest and most convenient for those that live on the outskirts of the city.</p>
+    <p><br></p>
+</div>
+    			</article>
+  				<!-- End Resolution 5 --> 
+
+				<!-- Resolution 6 --> 
+    			<article id="six">
+      				<div class="center">  
+						<p><br></p>
+<h2>Data Driven Recommendations</h2>
+<p>What we really want to know is given the historical data, and limited resources where should we target.</p>
+<p>To identify this I take the total amount spent in a certain radius and normalize it to its area. This we tell us the spending density per square kilometer as we travel further from the store. How far from the store should we focus our marketing efforts to achieve maximum results?</p>
+<p>First we can look at how many customers we anticipate reaching within a given radius around the sore, and also look at the customer density, i.e., how many customers per square kilometer.</p>
+<p><br></p>
+<pre class="brush: python"># Plot total customer reached ============
+plt.figure(); plt.clf()
+plt.subplot(1,2,1);
+plt.plot(radiuss, cc1, color = colours[0], label = 'Store 1')
+plt.plot(radiuss, cc2, color = colours[1], label = 'Store 2')
+plt.plot(radiuss, cc3, color = colours[2], label = 'Store 3')
+plt.plot(radiuss, cc4, color = colours[3], label = 'Store 4')
+plt.plot(radiuss, cc5, color = colours[4], label = 'Store 5')
+sns.despine(); plt.xticks(np.linspace(0, 4000, 5), ['0', '1', '2', '3', '4'], size = 18); 
+plt.xlabel('Radius (km)', size = 20); plt.xlim(0, 4000)
+plt.yticks(size = 18); plt.title('Total Customers Reached', size = 25); 
+plt.legend(fontsize = 18, loc= 4); plt.ylim(0, 60000)
+
+plt.subplot(1,2,2);
+plt.plot(radiuss, np.asarray(cc1)/(np.pi*np.asarray(radiuss)**2)*1e6, color = colours[0], label = 'Store 1')
+plt.plot(radiuss, np.asarray(cc2)/(np.pi*np.asarray(radiuss)**2)*1e6, color = colours[1], label = 'Store 2')
+plt.plot(radiuss, np.asarray(cc3)/(np.pi*np.asarray(radiuss)**2)*1e6, color = colours[2], label = 'Store 3')
+plt.plot(radiuss, np.asarray(cc4)/(np.pi*np.asarray(radiuss)**2)*1e6, color = colours[3], label = 'Store 4')
+plt.plot(radiuss, np.asarray(cc5)/(np.pi*np.asarray(radiuss)**2)*1e6, color = colours[4], label = 'Store 5')
+sns.despine(); plt.xticks(np.linspace(0, 4000, 5), ['0', '1', '2', '3', '4'], size = 18); 
+plt.xlabel('Radius (km)', size = 20); plt.xlim(0, 4000)
+plt.yticks(size = 18); plt.title('Total Customers Reached Per Sq Km', size = 25); 
+plt.legend(fontsize = 18, loc= 1); plt.ylim(0, 20000)
+</pre>
+<p><br></p>
+<center><img src="figs/total_customers.png" width="95%"></center>
+<p><br></p>
+<p>We note they all follow similar profiles after around 1km from the store. Since the revenue from the first store is so much higher, this indicates that each customer on average purchases more. A theme indicaed in other figures.</p>
+<p><br></p>
+<pre class="brush: python">plt.figure(); plt.clf()
+plt.plot(radiuss, np.asarray(s1)/(np.pi*np.asarray(radiuss)**2), color = colours[0], label = 'Shop 1')
+plt.plot(radiuss, np.asarray(s2)/(np.pi*np.asarray(radiuss)**2), color = colours[1], label = 'Shop 2')
+plt.plot(radiuss, np.asarray(s3)/(np.pi*np.asarray(radiuss)**2), color = colours[2], label = 'Shop 3')
+plt.plot(radiuss, np.asarray(s4)/(np.pi*np.asarray(radiuss)**2), color = colours[3], label = 'Shop 4')
+plt.plot(radiuss, np.asarray(s5)/(np.pi*np.asarray(radiuss)**2), color = colours[4], label = 'Shop 5')
+sns.despine(); plt.xticks(np.linspace(0, 1000, 6), ['0', '0.2', '0.4', '0.6', '0.8', '1.0'], size = 18); 
+plt.xlabel('Radius (km)', size = 20); plt.xlim(0, 1000)
+plt.yticks(size = 18); plt.title('Total Euros Spent Per Sq Km (Millions)', size = 25); 
+plt.legend(fontsize = 18, loc= 1); plt.ylim(0, 100)
+</pre>
+<p><br></p>
+<center><img src="figs/spent_efforts.png" width =  "95%"></center>
+<p><br></p>
+<p>From the following figures we see that stores 2-5 marketing efforts are best served close to the store, with diminishing returns after around 200m. We note that shop 2 diverges since there is one customer located 6.6m from the store.</p>
+<p>An example of marketing close to the store, which would be effective for stores 2-5, may include paper flyers, coupons, and billboards to direct and informing the local population of the stores offerings. Larger range marketing would be more appropriate for store 1, since much of the business comes from he entire city. In this case television and radio advertisements, or advertisements on local transportation such as on the bus or subway may be more effective due to its longer range.</p>
+          				<div class="left">
+            				<p></p> 
+            				<div class="container">
+               					<div class="sideText5">
+                  					<span class="line"></span>
+                	 				<p></p>
+                				</div>
+            				</div>	
+      						<p></p>
+        				</div>
+          				<div class="right">
+        				</div> 
+       				</div>       
+    			</article>
+    			<!-- End Resolution 6 --> 
+
+				<!-- Resolution 7 -->  
+    			<article id="seven" style="/*background: rgba(247, 247, 247, 0.6);;*/ padding-bottom: 0;">	 
+					<div class="center">
+					   <div style="clear:both;"></div>	
+      				</div>   	
+    			</article>
+  				<!-- End Resolution 7 --> 
+  	
+				<!-- Resolution 8 -->  
+    			<article id="eight">
+      				<div class="center">	
+              			<h2>Conclusion</h2>
+                    <p>To conclude I have identified that the stores have different customer bases, in particular stores 3, 4, and 5 have a localized customer base whereas store 2, and especially 1 is much further reaching. Due to this I would recommend marketing customers of these stores differently to best use the resources available. Specifically to keep marketing close to stores 3, 4, and 5 where the spend radius plateaus quickly, and using long range advertising such as radio advertisements for store 1.</p>
+              			<div class="left"> 	
+                			<div class="container">
+                				<div class="sideText4">
+                  					<span class="line"></span>
+                		  			<p></p>
+                				</div>
+              				</div>	  
+      						<p></p>
+            			</div>
+              			<div class="right">
+              			</div>  
+              			<div style="clear: both;"></div>
+                     </div> 
+              		 <div class="center">
+              		</div>  	
+    			</article>
+  				<!-- End Resolution 8 --> 
+	
+    			<!-- Resolution 9-->      
+    			<article id="forecast" style=" display: block; margin-bottom: 0px; ">
+      					<div class="center"> 
+              				
+      					</div>
+      				
+    			</article>
+    			<!-- End Resolution 9 --> 
+              
+        	</div> <!--extra wrapper-->
+         	<footer class="text-center">
+        <!--<div class="footer-below">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h4>Matthew Moocarme - moocarme@gmail.com</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>-->
+    	</div><!-- end wrapper -->
+ 	<script type="text/javascript" src="//munchkin.marketo.net//munchkin-beta.js"></script><script>Munchkin.init('062-HAC-076', {customName: 'past-forward-2016', wsInfo: 'j1RR'});</script>
+ 	</body>
+
+
+<style>
+#mktoForm_375 {
+    width: auto!important;
+}
+</style>
+<script type="text/javascript">
+     SyntaxHighlighter.all()
+</script>
+
+
+
+<script>
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click();
+
+function openPlot(evt, plot) {
+    // Declare all variables
+    var i, tabcontent, tablinks;
+
+    // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Show the current tab, and add an "active" class to the link that opened the tab
+    document.getElementById(plot).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+
+function openPlot2(evt, plot) {
+    // Declare all variables
+    var i, tabcontent, tablinks;
+
+    // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("tabcontent2");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("tablinks2");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Show the current tab, and add an "active" class to the link that opened the tab
+    document.getElementById(plot).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+
+$(document).ready(function() {
+  
+    
+  
+	var sections = $('article'), 
+        nav = $('nav'), 
+        nav_height = nav.outerHeight();
+ 
+	$(window).on('scroll', function () {
+
+  		var cur_pos = $(this).scrollTop();
+ 
+  		sections.each(function() {
+    	var top = $(this).offset().top - nav_height,
+        bottom = top + $(this).outerHeight();
+ 
+    	if (cur_pos >= top && cur_pos <= bottom) {
+      		nav.find('a').removeClass('active');
+      		sections.removeClass('active');
+ 
+      		$(this).addClass('active');
+      		nav.find('a[href="/examples/SmoothPageScroll/#'+$(this).attr('id')+'"]').addClass('active');
+    	}
+  		});
+      
+      	if ($('#one .left').isOnScreen()) {
+    		var wScroll = $(this).scrollTop();
+          	var $sideText1 = $('.sideText1');
+            var containerScroll = wScroll - $sideText1.parent().offset().top + 1000;
+      		$sideText1.css({
+       			'transform' : 'translate(0px, +'+ containerScroll/10 +'%)' 
+      		});  
+      	}
+      	
+      	if ($('#two .left').isOnScreen()) {
+    		var wScroll = $(this).scrollTop();
+          	var $sideText2 = $('.sideText2');
+          	var containerScroll2 = wScroll - $sideText2.parent().offset().top + 1000;
+      		$sideText2.css({
+       			'transform' : 'translate(0px, +'+ containerScroll2/10 +'%)' 
+      		});  
+      	}
+      	
+      	 if ($('#four .left').isOnScreen()) {
+    		var wScroll = $(this).scrollTop();
+          	var $sideText3 = $('.sideText3');
+          	var containerScroll3 = wScroll - $sideText3.parent().offset().top + 1000;
+      		$sideText3.css({
+       			'transform' : 'translate(0px, +'+ containerScroll3/10 +'%)' 
+      		});  
+      	}
+      
+      	if ($('#eight .left').isOnScreen()) {
+    		var wScroll = $(this).scrollTop();
+          	var $sideText4 = $('.sideText4');
+          	var containerScroll4 = wScroll - $sideText4.parent().offset().top + 1000;
+      		$sideText4.css({
+       			'transform' : 'translate(0px, +'+ containerScroll4/10 +'%)' 
+      		});  
+      	}
+      
+      	if ($('#six .left').isOnScreen()) {
+    		var wScroll = $(this).scrollTop();
+          	var $sideText5 = $('.sideText5');
+          	var containerScroll5 = wScroll - $sideText5.parent().offset().top + 1000;
+      		$sideText5.css({
+       			'transform' : 'translate(0px, +'+ containerScroll5/10 +'%)' 
+      		});  
+      	}
+      
+      	/** Measures the height of hero then nav bar appears after it **/
+      	var heroHeight = $('.hero').height();
+      
+      	if ($(this).scrollTop() > heroHeight) {
+          $('.nav-toggle').addClass('show');
+        } else {
+           $('.nav-toggle').removeClass('show');
+        }
+
+      	/** For Desktop Nav only (from 1170px wide) **/
+      	if ($(this).scrollTop() > heroHeight){ 
+    		$('#desktopNav').addClass('fixedElement'); 
+  		} else {
+    		$('#desktopNav').removeClass('fixedElement'); 
+  		}	
+	});  
+  
+  	/**** Smooth Scrolling ****/
+	$('a[href*=#]:not([href=#])').click(function() {
+    	if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') 
+        	|| location.hostname == this.hostname) {
+
+        	var target = $(this.hash);
+        	target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+           	if (target.length) {
+            	$('html,body').animate({
+                	scrollTop: target.offset().top
+            	}, 1000);
+            	return false;
+        	}
+    	}
+	});
+  	
+  	
+}); 
+
+  
+  /*** Navigation menu toggle ***/
+  $('.nav-toggle').on('click', function(){
+    $('.wrapper').toggleClass('open');
+    $('.main-navigation-left').toggleClass('open');
+    $('.nav-toggle').toggleClass('open');
+  });
+  
+  /*Desktop Fixed Nav*/
+  var stickyTop = $('#desktopNav').offset().top;
+  
+  
+  /** Function to see when a div is in view **/
+  $.fn.isOnScreen = function(){
+    var win = $(window);
+    var viewport = {
+        top : win.scrollTop(),
+        left : win.scrollLeft()
+    };
+    
+    viewport.right = viewport.left + win.width();
+    viewport.bottom = viewport.top + win.height();
+    
+    var bounds = this.offset();
+    bounds.right = bounds.left + this.outerWidth();
+    bounds.bottom = bounds.top + this.outerHeight();
+    
+    return (!(viewport.right < bounds.left || viewport.left > bounds.right || viewport.bottom < bounds.top || viewport.top > bounds.bottom));
+  };
+</script></html>
