@@ -584,35 +584,35 @@ reviews = csc_matrix((train_data['review_overall'].astype(float),
 <p><br></p>
 <p>In general item-item performs better than user-user. So for the remainder we assume item-item unless stated otherwise.</p>
 <br>
-<h2>Matrix Facorization</h2>
+<h2>Matrix Factorization</h2>
 <br>
-<p>Matrix factorization is an important component of collaborative-filtering based approaches of recommendation systems as it allows us to approximate the original matrix. While this can be compuationally quite demanding it generally pays off, since whenever any matrix multiplication needs to be performed, it can be done so easier due to the reduced size of the matrix after factorization.</p>
-<p>It is important to note that matrix factorization is not the end result, but a tool to help </p>
+<p>Matrix factorization is an important component of collaborative-filtering based approaches of recommendation systems as it allows us to approximate the original matrix. While this can be compuationally quite demanding it generally pays off, since whenever any matrix multiplication needs to be performed, it can be done much faster due to the reduced size of the matrix after factorization.</p>
+<p>It is important to note that matrix factorization is not the end result, but a tool to help reduce the size of the matrix for further computations.</p>
 <br>
 <h4>Singular Value Decomposition</h4>
 <br>       
 <p>In linear algebra, the singular value decomposition (SVD) is a factorization of a real or complex matrix. It is the generalization of the eigendecomposition of a positive semidefinite normal matrix.</p>
-<p>Matrix factorization is an important component of collaborative-filtering based approaches of recommendation systems as it allows us to approximae the original matrix </p>
+<p>Matrix factorization is an important component of collaborative-filtering based approaches of recommendation systems as it allows us to approximate the original matrix. </p>
 <div style="text-align: center;">
 <p><span class="math"> \( D=W\Sigma T^T\) </span></p>  
 </div>
 <br>
 <center><img src="figs/mf3.jpg" width = "80%"></center>
 <p><br></p>
-<p>We can say that our original sparse matrix is similar to a linear map, we pretend they are we so can make algorithms that predict how people rate movies with pretty good accuracy. So if you know that a beer such as Blue Moon gets ratings low reviews from a certain group of users, then a new person may review Blue Moon based on a linear combination of how well they align with that group of people, if they strongly align, the model will predict a low rating for Blue Moon. By align I mean the user has similar ratings across other beers to the users in the group. In other words, a linear combination of users epitomize the process of rating beers.</p>
+<p>We say that our original sparse matrix is similar to a linear map, and thus can make algorithms that predict how people rate beers with surprisingly good accuracy. So if you know that a beer such as Blue Moon gets ratings low reviews from a certain group of users, then a new person may review Blue Moon based on a linear combination of how well they align with that group of people, if they strongly align, the model will predict a low rating for Blue Moon. By “align" I mean the user has similar ratings across other beers to the users in the group. In other words, a linear combination of users epitomize the process of rating beers.</p>
 <br>
 <p>
 <b>SVD provides an useful approach to matrix factorization that represents the process of people rating beers.</b> By changing the basis of one or both vector spaces involved, we isolate the different (orthogonal) characteristics of the process. In the context of our movie example, “factorization” means the following:</p>
     
     <li><p>Come up with a basis set of vectors v<sub>1</sub>, v<sub>2</sub>, ..., v<sub>i</sub> so that every beer can be written as a linear combination of the v<sub>i</sub>.</p></li>
-    <li><p>Do the analogous thing for people to get a basis set for people.</p></li>
+    <li><p>Do the analogous thing for people to get a basis set for beer drinkers.</p></li>
     <li><p>Do steps 1 and 2 in such a way that the map <span class="math"> \(\Sigma \) </span> is diagonal with respect to both new bases simultaneously.</p></li>
 <p>
 One might think of the v<sub>i</sub> as “idealized beers" and the p<sub>j</sub> as “idealized beer drinkers”. For example, an “idealized beer" may be a stout, and its corresponding “idealized beer drinker" may be someone that only drinks stouts, though its unlikely the "idealized beer" will fall into categories corresponding to types of beers.</p>
 <p><br></p>
 <h4>Alternating Least Squares</h4>
 <p><br></p>
-<p>To do this we are trying to obtain the matrices similar to <span class="math"> \(W \) </span> and <span class="math"> \(T \) </span> as in SVDs. We first estimate <span class="math"> \(W \) </span> using a random initialization of <span class="math"> \(T \) </span> and estimate <span class="math"> \(T \) </span> by using <span class="math"> \(W \) </span>. After enough number of iterations, we should hopefully reach convergence  where either the matrices <span class="math"> \(W \) </span> and <span class="math"> \(T \) </span> are no longer changing or the change is below some tolerance.</p>
+<p>The algorithmn of alternating least square aims to factorize the original matrix and obtain two matrices similar to <span class="math"> \(W \) </span> and <span class="math"> \(T \) </span> that were obtained using SVD. To do this we first estimate <span class="math"> \(W \) </span> using a random initialization of <span class="math"> \(T \) </span> and estimate <span class="math"> \(T \) </span> by using <span class="math"> \(W \) </span>. After enough number of iterations, we should hopefully reach convergence  where either the matrices <span class="math"> \(W \) </span> and <span class="math"> \(T \) </span> are no longer changing or the change is below some tolerance.</p>
 <p><br></p>
 <pre class = "brush: python">def alternating_least_squares(Cui, factors, regularization=0.01,
                               iterations=15, use_native=True, num_threads=0,
@@ -681,7 +681,7 @@ als_ii = TopRelated_itemitem(als_beer_factors.T)
 <p><br></p>
 <h4>Implicit Matrix Factorization</h4>
 <p><br></p>
-<p>Code can be found from Chris Johnson's blog <a href="https://github.com/MrChrisJohnson/implicit-mf">here</a>, based on <a href="http://yifanhu.net/PUB/cf.pdf">this paper</a>, and demonstrated below:.</p>
+<p>Code can be found from Chris Johnson's blog <a href="https://github.com/MrChrisJohnson/implicit-mf">here</a>, based on <a href="http://yifanhu.net/PUB/cf.pdf">this paper</a>, and demonstrated below:</p>
 <pre class="brush: python">class ImplicitMF():
 
     def __init__(self, counts, num_factors=40, num_iterations=30,
@@ -740,7 +740,7 @@ als_ii = TopRelated_itemitem(als_beer_factors.T)
 <p><br></p>
 <h4>Other Methods</h4>
 <p><br></p>
-<p>Incorporating other user and item features with collaborative filtering are known as hybrid recommender systems. An example of how to incorporate features into your recommendation has been handled by the folks at <a href="https://www.lyst.com/">Lyst</a> with their python package <a href="https://github.com/lyst/lightfm">Lightfm</a>.</p>
+<p>Incorporating other user and item features with collaborative filtering are known as hybrid recommender systems. An example of how to incorporate features into your recommendation has been handled by the folks at <a href="https://www.lyst.com/">Lyst</a> with their python package <a href="https://github.com/lyst/lightfm">LightFM</a>.</p>
 <pre class="brush: python">from lightfm import LightFM
 model = LightFM(loss='warp')
 model.fit(train_data, epochs=30, num_threads=2, user_features=None, item_features=None)
@@ -772,7 +772,6 @@ model.fit(train_data, epochs=30, num_threads=2, user_features=None, item_feature
     <h4>M-fold validation</h4>
     <br>
     <p>A useful variant that combines leave-k-out and standard K-fold crossvValidation is (sometimes) called M-fold cross validation. The idea is simple - split the data into a training set and holdout set. On the holdout set, perform leave-k-out.</p>
-    <p>On our example data, lets perform a 50% training and holdout split, and 50% leave-k-out on the holdout set. This means we are training on 50% of the data, and testing on 25%.</p>
     <br>
     <h2>Evaluation Metrics</h2>
     <h4>Mean Average Precision</h4>
@@ -782,7 +781,7 @@ model.fit(train_data, epochs=30, num_threads=2, user_features=None, item_feature
       <p><span class="math"> \( AP@k = \sum_{n=1}^k\frac{precision@n}{min(n, y_{test})}\) </span></p>  
     </div>
     <p><br></p>
-    <p>Where the mean average precision at k (MAP@k) is the mean of the AP@k across all users. For example if the evaluation metric were MAP@100, the recommendation system chooses 100 beers, and its trying to predict a number of beers, <span class="math"> \(n \) </span> that have been left out for validation. If the missing beers are correctly choosen and ranked highly in the list of 100, the MAP will be close to 1. If they were not in the list, the MAP would be 0. </p>
+    <p>For example if the evaluation metric were MAP@100, the recommendation system chooses 100 beers, and its trying to predict a number of beers, <span class="math"> \(n \) </span> that have been left out for validation. If the missing beers are correctly choosen and ranked highly in the list of 100, the MAP will be close to 1. If they were not in the list whatsoever, the MAP would be 0. </p>
     <br>
     <pre class="brush: python">def apk(actual, predicted, k=10):
     """
@@ -969,7 +968,8 @@ def ndcg_at_k(r, k, method=0):
 				<!-- Resolution 8 -->  
     			<article id="eight">
       				<div class="center">	
-              			<h2>Let's Drink - Choose Your Beer</h2>
+              			<h2>Let's Drink - Choose Your Beer <i class="fa fa-beer" aria-hidden="true"></i>
+</h2>
                     <br>
                     <div><center><iframe src="http://s3.amazonaws.com/beer-reco/venn_test.html" width = "80%" height = "550" scrolling="no"></iframe></center></div>
               			<div class="left"> 	
