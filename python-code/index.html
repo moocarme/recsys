@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html>
+    <head>
+          <script type="text/javascript" src="http://www.mattmoocar.me/insight-DC/js/shCore.js"></script>
+        <script type="text/javascript" src="http://www.mattmoocar.me/insight-DC/js/shBrushPython.js"></script>
+<title>Insight Data Challenge - Super Marketing Insights</title>
+</head>
+<body><pre class= "brush: python">
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Oct 14 16:39:43 2016
+
+@author: matt-666
+"""
+
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy.spatial import Voronoi, voronoi_plot_2d
+
+# Helper functions =======================================
+def simpleaxis(ax):
+    """
+    This function removes spines for a cleaner plot - Thanks Hugo! 
+    """
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.get_xaxis().tick_bottom()
+    ax.get_yaxis().tick_left()
+    ax.xaxis.set_tick_params(size=6)
+    ax.yaxis.set_tick_params(size=6)
+
+    
+def plot_Features_Box_Plot(features, target, colnames = None):
+    """
+    This function makes a Boxplot from the various features, separated by
+    target column
+    """
+    assert (features.shape[0] == target.shape[0]), "Feature set and target set have different observations"
+    if colnames:
+        assert ((len(colnames) - 1) == features.shape[1]), "Colnames should have same length as number of columns of features and target combined"
+    else:
+        colnames = range(features.shape[1] + 1)
+    plotData = pd.concat([features, target], axis = 1, ignore_index = True)
+    plotData.columns = colnames[:-1]+['Result']
+    df_long = pd.melt(plotData, 'Result', var_name="Features", value_name="Count")
+    sns.set(font_scale = 1.5)
+    g = sns.factorplot("Features", hue = 'Result', y="Count", data=df_long, kind="box")
+    g.set_xticklabels(rotation=30)
+
+def get_theta_1i2(dist_i1, dist_i2):
+    '''
+    Gets the angle between three points using the law of cosines
+    '''
+    return np.arccos(((dist_i1)**2+(d12)**2-(dist_i2)**2)/float(2*d12*dist_i1))
+    
+def check_with_third(pt, known_pt, known_dist):
+    '''
+    Checks with a third, known point, calculates squared distance error
+    '''
+    dist1 = np.sqrt((pt[0]-known_pt[0])**2+(pt[1]-known_pt[1])**2)
+    dist2 = np.sqrt((pt[0]-known_pt[0])**2+(-pt[1]-known_pt[1])**2)
+    
+    dist_err1 = np.abs(known_dist-dist1)
+    dist_err2 = np.abs(known_dist-dist2)
+    #print(known_dist, dist1, dist2)
+    if dist_err1 < dist_err2:
+        return pt
+    else:
+        return (pt[0], -pt[1])
+
+    
+def get_xy(dist_i1, dist_i2, pm = 1):
+    '''
+    gets x coordinate
+    '''
+    theta = pm*get_theta_1i2(dist_i1, dist_i2)
+    return (dist_i1*np.cos(theta), dist_i1*np.sin(theta))
+    
+
+def triangulate(dist_i1, dist_i2, dist_i3):
+    '''
+    triangulates point
+    '''
+    xy_guess = get_xy(dist_i1, dist_i2)
+    return check_with_third(xy_guess, shop_3, dist_i3)
+    
+def plot_stores(marker_size = 300, k=False):
+    '''
+    plots stores on map with a star
+    '''
+    if k:
+        colours = ['#000000', "#000000", "#000000", "#000000", "#000000"]
+    else:
+        colours = ['#c0392b', "#1abc9c", "#8e44ad", "#3498db", "#f1c40f"]
+    plt.scatter(shop_1[0], shop_1[1], s = marker_size, marker= "*", color = colours[0])
+    plt.scatter(shop_2[0], shop_2[1], s = marker_size, marker= "*", color = colours[1])
+    plt.scatter(shop_3[0], shop_3[1], s = marker_size, marker= "*", color = colours[2])
+    plt.scatter(shop_4[0], shop_4[1], s = marker_size, marker= "*", color = colours[3])
+    plt.scatter(shop_5[0], shop_5[1], s = marker_size, marker= "*", color = colours[4])
+
+def voronoi_finite_polygons_2d(vor, radius=None):
+    """
+    Reconstruct infinite voronoi regions in a 2D diagram to finite
+    regions.
+
+    Parameters
+    ----------
+    vor : Voronoi
+        Input diagram
+    radius : float, optional
+        Distance to 'points at infinity'.
+
+    Returns
+    -------
+    regions : list of tuples
+        Indices of vertices in each revised Voronoi regions.
+    vertices : list of tuples
+        Coordinates for revised Voronoi vertices. Same as coordinates
+        of input vertices, with 'points at infinity' appended to the
+        end.
+
+    """
+
+    if vor.points.shape[1] != 2:
+        raise ValueError("Requires 2D input")
+
+    new_regions = []
+    new_vertices = vor.vertices.tolist()
+
+    center = vor.points.mean(axis=0)
+    if radius is None:
+        radius = vor.points.ptp().max() *10
+
+    # Construct a map containing all ridges for a given point
+    all_ridges = {}
+    for (p1, p2), (v1, v2) in zip(vor.ridge_points, vor.ridge_vertices):
+        all_ridges.setdefault(p1, []).append((p2, v1, v2))
+        all_ridges.setdefault(p2, []).append((p1, v1, v2))
+
+    # Reconstruct infinite regions
+    for p1, region in enumerate(vor.point_region):
+        vertices = vor.regions[region]
+
+        if all(v >= 0 for v in vertices):
+            # finite region
+            new_regions.append(vertices)
+            continue
+
+        # reconstruct a non-finite region
+        ridges = all_ridges[p1]
+        new_region = [v for v in vertices if v >= 0]
+
+        for p2, v1, v2 in ridges:
+            if v2 < 0:
+                v1, v2 = v2, v1
+            if v1 >= 0:
+                # finite ridge: already in the region
+                continue
+
+            # Compute the missing endpoint of an infinite ridge
+
+            t = vor.points[p2] - vor.points[p1] # tangent
+            t /= np.linalg.norm(t)
+            n = np.array([-t[1], t[0]])  # normal
+
+            midpoint = vor.points[[p1, p2]].mean(axis=0)
+            direction = np.sign(np.dot(midpoint - center, n)) * n
+            far_point = vor.vertices[v2] + direction * radius*10
+
+            new_region.append(len(new_vertices))
+            new_vertices.append(far_point.tolist())
+
+        # sort region counterclockwise
+        vs = np.asarray([new_vertices[v] for v in new_region])
+        c = vs.mean(axis=0)
+        angles = np.arctan2(vs[:,1] - c[1], vs[:,0] - c[0])
+        new_region = np.array(new_region)[np.argsort(angles)]
+
+        # finish
+        new_regions.append(new_region.tolist())
+
+    return new_regions, np.asarray(new_vertices)
+    
+def col_mean(datacols):
+    '''
+    returns the mean of the column not indluding the zeros
+    '''
+    result = []
+    for column in datacols:
+        nonzeros = datacols[datacols[column]>0][column]
+        result.append(nonzeros.mean(axis = 0))
+    return result
+
+def plot_hists(datacols, xlab = '', log = False):
+    '''
+    plots histograms removing the zeros for each column
+    '''
+    colours = ['#c0392b', "#1abc9c", "#8e44ad", "#d35400", "#f1c40f"]
+    labels = ['Store 1', 'Store 2', 'Store 3', 'Store 4', 'Store 5']
+    data = []
+    for column in datacols:
+        nonzeros = datacols[datacols[column]>0][column]
+        data.append(nonzeros)
+    plt.figure()
+    plt.hist(data, log = True, color = colours[:len(data)], label = labels[:len(data)])
+    sns.despine(); plt.legend(fontsize = 20); 
+    plt.xticks(size = 18); plt.xlabel(xlab, size = 20)
+    plt.yticks(size = 18); plt.ylabel('Count', size = 20)
+
+def boxplots(datacols, ylim, ylabel):
+    '''
+    creates boxplot removing zeros from the column
+    '''
+    i = 1
+    plt.figure()
+    numcols = len(datacols.columns.values)
+    colours = ['#c0392b', "#1abc9c", "#8e44ad", "#d35400", "#f1c40f"]
+    for column in datacols:
+        plt.subplot(1, numcols, i)
+        g = sns.boxplot(order=column, y = np.log(datacols[datacols[column]>0][column]),orient='v', color = colours[i-1])
+        plt.title("Store" +str(i), size = 20)
+        plt.ylim(ylim)
+        if i == 1:
+            plt.ylabel("log(" + ylabel + ")", size = 20)
+            plt.yticks(size = 15)
+            sns.despine(top=True, right = True, bottom=True)
+        else:
+            plt.ylabel("")
+            g.set(yticklabels=[])
+            sns.despine(top=True, right = True, left=True, bottom=True)
+        i += 1
+        
+def dist_metrics(datacols):
+    '''
+    returns the mean of the column not indluding the zeros
+    '''
+    means, medians, stds = [], [], []
+    for column in datacols:
+        nonzeros = datacols[datacols[column]>0][column]
+        means.append(nonzeros.mean(axis = 0))
+        medians.append(nonzeros.median(axis = 0))
+        stds.append(nonzeros.std(axis = 0))
+    return means, medians, stds
+ 
+# ======================================================
+
+data = pd.read_csv('supermarket_data_aggr.csv')
+
+data.columns.values
+plt.hist(data.shops_used.dropna())
+
+data.head(30).to_html('dataframe_head.html')
+#plt.figure(666)
+#g = sns.jointplot(data.products_purchased, data.unique_products_purchased, kind="kde", space=0.3)
+#ax = g.ax_joint
+#ax.set_xscale('log')
+#ax.set_yscale('log')
+#g.ax_marg_x.set_xscale('log')
+#g.ax_marg_y.set_yscale('log')
+
+#avg_purch = sns.factorplot("shops_used", y = "amount_purchased", data = data, kind = "box")
+
+#avg_dist = sns.factorplot("shops_used", y = "avg_distance_to_shops", data = data, kind = "box")
+
+#purch_dist = sns.lmplot(x='avg_distance_to_shops', y='products_purchased', \
+#               hue='shops_used', data = data, palette = 'hls', fit_reg=False)
+
+#ax2 = purch_dist.ax
+#ax2.set_xscale('log')
+#ax2.set_yscale('log')
+
+# Summary Stats
+total_purchased = data[['amount_purchased_shop_1','amount_purchased_shop_2', 
+                        'amount_purchased_shop_3', 'amount_purchased_shop_4',
+                        'amount_purchased_shop_5']].sum(axis=0)
+
+                        
+Avg_purchase = col_mean(data[['amount_purchased_shop_1','amount_purchased_shop_2',
+                              'amount_purchased_shop_3','amount_purchased_shop_4',
+                              'amount_purchased_shop_5']])        
+        
+Avg_products = col_mean(data[['products_purchased_shop_1','products_purchased_shop_2',
+                              'products_purchased_shop_3','products_purchased_shop_4',
+                              'products_purchased_shop_5']])        
+
+Avg_unique_products = col_mean(data[['unique_products_purchased_shop_1','unique_products_purchased_shop_2',
+                                     'unique_products_purchased_shop_3','unique_products_purchased_shop_4',
+                                     'unique_products_purchased_shop_5']])        
+
+mns, mds, stds = dist_metrics(data[['distance_shop_1','distance_shop_2',
+                                     'distance_shop_3','distance_shop_4',
+                                     'distance_shop_5']])        
+
+    
+# Create box plots =======
+boxplots(data[['amount_purchased_shop_1','amount_purchased_shop_2', 
+               'amount_purchased_shop_3', 'amount_purchased_shop_4', 
+               'amount_purchased_shop_5']], ylim=(-2,12), 
+                ylabel='Amount Purchased')
+
+boxplots(data[['products_purchased_shop_1','products_purchased_shop_2', 
+               'products_purchased_shop_3', 'products_purchased_shop_4', 
+               'products_purchased_shop_5']], ylim=(-1,11), 
+                ylabel='Products Purchased')
+
+boxplots(data[['products_purchased_shop_1','products_purchased_shop_2', 
+               'products_purchased_shop_3', 'products_purchased_shop_4', 
+               'products_purchased_shop_5']], ylim=(-1, 8), 
+                ylabel='Unique Products Purchased')
+
+# Create hists =============
+plot_hists(data[['amount_purchased_shop_1','amount_purchased_shop_2', 
+               'amount_purchased_shop_3', 'amount_purchased_shop_4', 
+               'amount_purchased_shop_5']], xlab = 'Amount Purchased', log=True)
+
+plot_hists(data[['products_purchased_shop_1','products_purchased_shop_2', 
+               'products_purchased_shop_3', 'products_purchased_shop_4', 
+               'products_purchased_shop_5']], xlab = 'Products Purchased', log=True)
+
+plot_hists(data[['products_purchased_shop_1','products_purchased_shop_2', 
+               'products_purchased_shop_3', 'products_purchased_shop_4', 
+               'products_purchased_shop_5']], xlab = 'Unique Products Purchased', log=True)
+
+
+# Configure triangulation =======================================================
+# distances between
+d12 = max(abs(data.distance_shop_2-data.distance_shop_1))
+d13 = max(abs(data.distance_shop_3-data.distance_shop_1))
+d14 = max(abs(data.distance_shop_4-data.distance_shop_1))
+d15 = max(abs(data.distance_shop_5-data.distance_shop_1))
+d23 = max(abs(data.distance_shop_3-data.distance_shop_2))
+d24 = max(abs(data.distance_shop_4-data.distance_shop_2))
+d25 = max(abs(data.distance_shop_5-data.distance_shop_2))
+d34 = max(abs(data.distance_shop_4-data.distance_shop_3))
+d35 = max(abs(data.distance_shop_5-data.distance_shop_3))
+d45 = max(abs(data.distance_shop_5-data.distance_shop_4))
+
+    
+shop_1 = (0, 0)
+shop_2 = (d12, 0)
+shop_3 = get_xy(d13, d23)
+shop_4 = triangulate(d14, d24, d34)
+shop_5 = triangulate(d15, d25, d35)
+shop_points = [list(shop_1), list(shop_2), list(shop_3), list(shop_4), list(shop_5)]
+
+data['x_coord'] = data.apply(lambda row: triangulate(row.distance_shop_1, row.distance_shop_2, row.distance_shop_3)[0], axis = 1)
+data['y_coord'] = data.apply(lambda row: triangulate(row.distance_shop_1, row.distance_shop_2, row.distance_shop_3)[1], axis = 1)
+
+plt.gca()
+purch_dist2 = sns.lmplot(x='x_coord', y='y_coord', \
+               hue='shops_used', data = data, palette = 'hls', fit_reg=False)
+plt.scatter(shop_5[0], shop_5[1],s=500,marker= "*")
+
+# Plot one store closest ===========================================
+# voronoi 
+vor = Voronoi(shop_points)
+
+# plot
+regions, vertices = voronoi_finite_polygons_2d(vor)
+plt.figure()
+colours = ['#c0392b', "#1abc9c", "#8e44ad", "#3498db", "#f1c40f"]
+# colorize
+for i, region in enumerate(regions):
+    polygon = vertices[region]
+    plt.fill(*zip(*polygon), alpha=0.3, color = colours[i])
+plt.xlim(-6000, 6000); plt.ylim(-4000, 4000)
+
+shop1_shoppers = data[(data.shops_used == 1) & (data.products_purchased_shop_1>0)][['x_coord', 'y_coord']]
+shop2_shoppers = data[(data.shops_used == 1) & (data.products_purchased_shop_2>0)][['x_coord', 'y_coord']]
+shop3_shoppers = data[(data.shops_used == 1) & (data.products_purchased_shop_3>0)][['x_coord', 'y_coord']]
+shop4_shoppers = data[(data.shops_used == 1) & (data.products_purchased_shop_4>0)][['x_coord', 'y_coord']]
+shop5_shoppers = data[(data.shops_used == 1) & (data.products_purchased_shop_5>0)][['x_coord', 'y_coord']]
+
+plt.scatter(shop1_shoppers.x_coord, shop1_shoppers.y_coord, color = colours[0])
+plt.scatter(shop2_shoppers.x_coord, shop2_shoppers.y_coord, color = colours[1])
+plt.scatter(shop3_shoppers.x_coord, shop3_shoppers.y_coord, color = colours[2])
+plt.scatter(shop4_shoppers.x_coord, shop4_shoppers.y_coord, color = colours[3])
+plt.scatter(shop5_shoppers.x_coord, shop5_shoppers.y_coord, color = colours[4])
+
+plot_stores(k=True)
+plot_stores(marker_size = 150)
+plt.xticks(np.linspace(-6000,6000,7), ['-6', '-4', '-2', '0', '2', '4', '6'], size = 20)
+plt.xlabel('km', size = 25); plt.ylabel('km', size = 25)
+plt.yticks(np.linspace(-4000,4000,5), ['-4', '-2', '0', '2', '4'], size = 20)
+plt.title('Store Used By 1-Store Customers', size = 30)
+
+labels = ['Store 1', 'Store 2','Store 3','Store 4','Store 5']
+dummies = [plt.plot([], [], ls='-', c=c)[0] for c in colours]        
+plt.legend(dummies, labels, fontsize = 18)
+# Average puchase ==============================
+plt.figure(); plt.clf()
+plt.subplot(2,3,1)
+plt.hexbin(data.x_coord/1000, data.y_coord/1000, np.log(data.avg_purchase_shop_1), 
+           cmap = plt.cm.YlGn, vmax = 5)
+plt.scatter(shop_points[0][0]/1000, shop_points[0][1]/1000, marker = '*', s = 150)
+plt.xlim(-6, 6); plt.ylim(-4, 4); plt.title('Store 1', size = 25);sns.despine(top = True, bottom = True, left = False, right = True)
+plt.xticks(size = 0); plt.yticks(size = 18); plt.ylabel('km', size = 20)
+
+plt.subplot(2,3,2)
+plt.hexbin(data.x_coord/1000, data.y_coord/1000, np.log(data.avg_purchase_shop_2), 
+           cmap = plt.cm.YlGn, vmax = 5)
+plt.scatter(shop_points[1][0]/1000, shop_points[1][1]/1000, marker = '*', s = 150)
+plt.xlim(-6, 6); plt.ylim(-4, 4); plt.title('Store 2', size = 25);sns.despine(top = True, bottom = True, left = True, right = True)
+plt.xticks(size = 0); plt.yticks(size = 0);
+
+plt.subplot(2,3,3)
+plt.hexbin(data.x_coord/1000, data.y_coord/1000, np.log(data.avg_purchase_shop_3), 
+           cmap = plt.cm.YlGn, vmax = 5)
+plt.scatter(shop_points[2][0]/1000, shop_points[2][1]/1000, marker = '*', s = 150)
+plt.xlim(-6, 6); plt.ylim(-4, 4); plt.title('Store 3', size = 25);sns.despine(top = True, bottom = False, left = True, right = True)
+plt.xticks(size = 0); plt.yticks(size = 0);
+
+plt.subplot(2,3,4)
+plt.hexbin(data.x_coord/1000, data.y_coord/1000, np.log(data.avg_purchase_shop_4), 
+           cmap = plt.cm.YlGn, vmax = 5)
+plt.scatter(shop_points[3][0]/1000, shop_points[3][1]/1000, marker = '*', s = 150)
+plt.xlim(-6, 6); plt.ylim(-4, 4); plt.title('Store 4', size = 25);sns.despine(top = True, bottom = False, left = False, right = True)
+plt.xticks(size = 18); plt.yticks(size = 18); plt.xlabel('km', size =20); plt.ylabel('km', size = 20)
+
+plt.subplot(2,3,5)
+plt.hexbin(data.x_coord/1000, data.y_coord/1000, np.log(data.avg_purchase_shop_5), 
+           cmap = plt.cm.YlGn, vmax = 5)
+s = plt.scatter(shop_points[4][0]/1000, shop_points[4][1]/1000, marker = '*', s = 150)
+plt.xlim(-6, 6); plt.ylim(-4, 4); plt.title('Store 5', size = 25);sns.despine(top = True, bottom = False, left = True, right = True);
+plt.xticks(size = 18); plt.yticks(size = 0); plt.xlabel('km', size= 20)
+
+plt.subplot(2,3,6); sns.despine(top = True, bottom = True, left = True, right = True);
+plt.xticks(size = 0); plt.yticks(size = 0);
+m = plt.cm.ScalarMappable(cmap=plt.cm.YlGn)
+m.set_array(np.linspace(0,5,20))
+plt.colorbar(m)
+
+# Number of products puchased ==============================
+plt.figure(); plt.clf()
+plt.subplot(2,3,1)
+plt.hexbin(data.x_coord/1000, data.y_coord/1000, np.log(data.products_purchased_shop_1), 
+           cmap = plt.cm.YlGn, vmax = 10)
+plt.scatter(shop_points[0][0]/1000, shop_points[0][1]/1000, marker = '*', s = 150)
+plt.xlim(-6, 6); plt.ylim(-4, 4); plt.title('Store 1', size = 25);sns.despine(top = True, bottom = False, left = True, right = True);
+plt.xticks(size = 0); plt.yticks(size = 18); plt.ylabel('km', size= 20)
+
+plt.subplot(2,3,2)
+plt.hexbin(data.x_coord/1000, data.y_coord/1000, np.log(data.products_purchased_shop_2), 
+           cmap = plt.cm.YlGn, vmax = 10)
+plt.scatter(shop_points[1][0]/1000, shop_points[1][1]/1000, marker = '*', s = 150)
+plt.xlim(-6, 6); plt.ylim(-4, 4); plt.title('Store 2', size = 25);sns.despine(top = True, bottom = False, left = True, right = True);
+plt.xticks(size = 0); plt.yticks(size = 0);
+
+plt.subplot(2,3,3)
+plt.hexbin(data.x_coord/1000, data.y_coord/1000, np.log(data.products_purchased_shop_3), 
+           cmap = plt.cm.YlGn, vmax = 10)
+plt.scatter(shop_points[2][0]/1000, shop_points[2][1]/1000, marker = '*', s = 150)
+plt.xlim(-6, 6); plt.ylim(-4, 4); plt.title('Store 3', size = 25);sns.despine(top = True, bottom = False, left = True, right = True);
+plt.xticks(size = 18); plt.yticks(size = 0); plt.xlabel('km', size= 20)
+
+plt.subplot(2,3,4)
+plt.hexbin(data.x_coord/1000, data.y_coord/1000, np.log(data.products_purchased_shop_4), 
+           cmap = plt.cm.YlGn, vmax = 10)
+plt.scatter(shop_points[3][0]/1000, shop_points[3][1]/1000, marker = '*', s = 150)
+plt.xlim(-6, 6); plt.ylim(-4, 4); plt.title('Store 4', size = 25);sns.despine(top = True, bottom = False, left = True, right = True);
+plt.xticks(size = 18); plt.yticks(size = 18); plt.xlabel('km', size= 20); plt.ylabel('km', size = 20)
+
+plt.subplot(2,3,5)
+plt.hexbin(data.x_coord/1000, data.y_coord/1000, np.log(data.products_purchased_shop_5), 
+           cmap = plt.cm.YlGn, vmax = 10)
+plt.scatter(shop_points[4][0]/1000, shop_points[4][1]/1000, marker = '*', s = 150)
+plt.xlim(-6, 6); plt.ylim(-4, 4); plt.title('Store 5', size = 25);sns.despine(top = True, bottom = False, left = True, right = True);
+plt.xticks(size = 18); plt.yticks(size = 0); plt.xlabel('km', size= 20)
+
+plt.subplot(2,3,6); sns.despine(top = True, bottom = True, left = True, right = True);
+plt.xticks(size = 0); plt.yticks(size = 0);
+m = plt.cm.ScalarMappable(cmap=plt.cm.YlGn)
+m.set_array(np.linspace(0,10,20))
+plt.colorbar(m)
+
+# Marketing Radius =======================================
+
+radiuss = np.linspace(10, 4000, 400)
+s1, s2, s3, s4, s5 = [], [], [], [], []
+cc1, cc2, cc3, cc4, cc5 = [], [], [], [], []
+for radius in radiuss:
+    s1.append(data[np.sqrt((data.x_coord - shop_1[0])**2+(data.y_coord - shop_1[1])**2)radius]['amount_purchased_shop_1'].sum(axis = 0))
+    s2.append(data[np.sqrt((data.x_coord - shop_2[0])**2+(data.y_coord - shop_2[1])**2)radius]['amount_purchased_shop_2'].sum(axis = 0))
+    s3.append(data[np.sqrt((data.x_coord - shop_3[0])**2+(data.y_coord - shop_3[1])**2)radius]['amount_purchased_shop_3'].sum(axis = 0))
+    s4.append(data[np.sqrt((data.x_coord - shop_4[0])**2+(data.y_coord - shop_4[1])**2)radius]['amount_purchased_shop_4'].sum(axis = 0))
+    s5.append(data[np.sqrt((data.x_coord - shop_5[0])**2+(data.y_coord - shop_5[1])**2)radius]['amount_purchased_shop_5'].sum(axis = 0))
+    
+    # Customer count
+    cc1.append(data[np.sqrt((data.x_coord - shop_1[0])**2+(data.y_coord - shop_1[1])**2)radius].shape[0])
+    cc2.append(data[np.sqrt((data.x_coord - shop_2[0])**2+(data.y_coord - shop_2[1])**2)radius].shape[0])
+    cc3.append(data[np.sqrt((data.x_coord - shop_3[0])**2+(data.y_coord - shop_3[1])**2)radius].shape[0])
+    cc4.append(data[np.sqrt((data.x_coord - shop_4[0])**2+(data.y_coord - shop_4[1])**2)radius].shape[0])
+    cc5.append(data[np.sqrt((data.x_coord - shop_5[0])**2+(data.y_coord - shop_5[1])**2)radius].shape[0])
+    
+sns.set_style('white')
+plt.figure(); plt.clf()
+plt.subplot(1,2,1)
+plt.plot(radiuss, s1, color = colours[0], label = 'Store 1')
+plt.plot(radiuss, s2, color = colours[1], label = 'Store 2')
+plt.plot(radiuss, s3, color = colours[2], label = 'Store 3')
+plt.plot(radiuss, s4, color = colours[3], label = 'Store 4')
+plt.plot(radiuss, s5, color = colours[4], label = 'Store 5')
+sns.despine(); plt.xticks(np.linspace(0, 4000, 5), ['0', '1', '2', '3', '4'], size = 18); plt.xlabel('Radius (km)', size = 20)
+plt.yticks(size = 18); plt.title('Total Euros Spent', size = 25); plt.legend(fontsize = 18, loc= 2)
+#normalized
+plt.subplot(1,2,2)
+plt.plot(radiuss, np.asarray(s1)/(data['amount_purchased_shop_1'].sum(axis = 0)), color = colours[0], label = 'Store 1')
+plt.plot(radiuss, np.asarray(s2)/(data['amount_purchased_shop_2'].sum(axis = 0)), color = colours[1], label = 'Store 2')
+plt.plot(radiuss, np.asarray(s3)/(data['amount_purchased_shop_3'].sum(axis = 0)), color = colours[2], label = 'Store 3')
+plt.plot(radiuss, np.asarray(s4)/(data['amount_purchased_shop_4'].sum(axis = 0)), color = colours[3], label = 'Store 4')
+plt.plot(radiuss, np.asarray(s5)/(data['amount_purchased_shop_5'].sum(axis = 0)), color = colours[4], label = 'Store 5')
+sns.despine(); plt.xticks(np.linspace(0, 4000, 5), ['0', '1', '2', '3', '4'], size = 18); plt.xlabel('Radius (km)', size = 20)
+plt.yticks(size = 18); plt.title('Normalized Total Spent', size = 25); plt.legend(fontsize = 18, loc= 4)
+
+
+plt.figure(); plt.clf()
+plt.plot(radiuss, np.asarray(s1)/(np.pi*np.asarray(radiuss)**2), color = colours[0], label = 'Store 1')
+plt.plot(radiuss, np.asarray(s2)/(np.pi*np.asarray(radiuss)**2), color = colours[1], label = 'Store 2')
+plt.plot(radiuss, np.asarray(s3)/(np.pi*np.asarray(radiuss)**2), color = colours[2], label = 'Store 3')
+plt.plot(radiuss, np.asarray(s4)/(np.pi*np.asarray(radiuss)**2), color = colours[3], label = 'Store 4')
+plt.plot(radiuss, np.asarray(s5)/(np.pi*np.asarray(radiuss)**2), color = colours[4], label = 'Store 5')
+sns.despine(); plt.xticks(np.linspace(0, 1000, 6), ['0', '0.2', '0.4', '0.6', '0.8', '1.0'], size = 18); 
+plt.xlabel('Radius (km)', size = 20); plt.xlim(0, 1000)
+plt.yticks(size = 18); plt.title('Total Euros Spent Per Sq Km (Millions)', size = 25); 
+plt.legend(fontsize = 18, loc= 1); plt.ylim(0, 100)
+
+
+# Plot total customer reached ============
+plt.figure(); plt.clf()
+plt.subplot(1,2,1);
+plt.plot(radiuss, cc1, color = colours[0], label = 'Store 1')
+plt.plot(radiuss, cc2, color = colours[1], label = 'Store 2')
+plt.plot(radiuss, cc3, color = colours[2], label = 'Store 3')
+plt.plot(radiuss, cc4, color = colours[3], label = 'Store 4')
+plt.plot(radiuss, cc5, color = colours[4], label = 'Store 5')
+sns.despine(); plt.xticks(np.linspace(0, 4000, 5), ['0', '1', '2', '3', '4'], size = 18); 
+plt.xlabel('Radius (km)', size = 20); plt.xlim(0, 4000)
+plt.yticks(size = 18); plt.title('Total Customers Reached', size = 25); 
+plt.legend(fontsize = 18, loc= 4); plt.ylim(0, 60000)
+
+plt.subplot(1,2,2);
+plt.plot(radiuss, np.asarray(cc1)/(np.pi*np.asarray(radiuss)**2)*1e6, color = colours[0], label = 'Store 1')
+plt.plot(radiuss, np.asarray(cc2)/(np.pi*np.asarray(radiuss)**2)*1e6, color = colours[1], label = 'Store 2')
+plt.plot(radiuss, np.asarray(cc3)/(np.pi*np.asarray(radiuss)**2)*1e6, color = colours[2], label = 'Store 3')
+plt.plot(radiuss, np.asarray(cc4)/(np.pi*np.asarray(radiuss)**2)*1e6, color = colours[3], label = 'Store 4')
+plt.plot(radiuss, np.asarray(cc5)/(np.pi*np.asarray(radiuss)**2)*1e6, color = colours[4], label = 'Store 5')
+sns.despine(); plt.xticks(np.linspace(0, 4000, 5), ['0', '1', '2', '3', '4'], size = 18); 
+plt.xlabel('Radius (km)', size = 20); plt.xlim(0, 4000)
+plt.yticks(size = 18); plt.title('Total Customers Reached Per Sq Km', size = 25); 
+plt.legend(fontsize = 18, loc= 1); plt.ylim(0, 20000)
+</pre></body></html>

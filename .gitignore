@@ -7,3 +7,9 @@ beer_recs.json
 beer_reviews/
 ml-100k/
 
+# gem files
+Gemfile
+Gemfile.lock
+
+# extra site file
+_site/
