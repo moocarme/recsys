@@ -43,31 +43,32 @@
           background-image: url('figs/ignasi_pattern_s.png');
         }
         h1{
-          font-size: 200%;
+          font-size: 250%;
           font-family: 'JunctionRegular';
         }
 
         h2{
-          font-size: 180%;
+          font-size: 210%;
         }
         h3{
-          font-size: 160%;
+          font-size: 200%;
         }
 
         h4{
-          font-size: 140%;
+          font-size: 180%;
         }
         h5{
-          font-size: 120%;
+          font-size: 160%;
         }
 
         h6{
-          font-size: 110%;
+          font-size: 150%;
         }
         p {
            font-family: 'JunctionRegular';
            font-weight: normal;
            font-style: normal;
+           font-size: 150%;
         } 
         code {
       		  color: inherit;
@@ -461,11 +462,15 @@ ul.tab a:focus {background-color: #ddd;}
                       <br>
                       <p>Resources</p>
                       <li><p><a href="http://bugra.github.io/work/notes/2014-04-19/alternating-least-squares-method-for-collaborative-filtering/">Blog post on alternating least squares</a></p></li>
-                      <li><p><a href="https://jeremykun.com/2016/04/18/singular-value-decomposition-part-1-perspectives-on-linear-algebra/">Blog post on singular value decomposition</a></p></li>
-                      <li><p><a href="https://making.dia.co/embedding-everything-for-anything2anything-recommendations-fca7f58f53ff#.pms8hvlyj">Blog post on matrix factorization</a></p></li>
+                      <li><p><a href="https://jeremykun.com/2016/04/18/singular-value-decomposition-part-1-perspectives-on-linear-algebra/">Blog post on singular value decomposition by Jeremy Kun</a></p></li>
+                      <li><p><a href="https://making.dia.co/embedding-everything-for-anything2anything-recommendations-fca7f58f53ff#.pms8hvlyj">Blog post on matrix factorization by Ethan RosenThal of Dia & Co</a></p></li>
                       <li><p>Jupyter notebook on validating recommendation algoritms on Insight dropbox</p></li>
               			</div>
               			<div class="left"></div>
+                    <div>
+                      <h2>Na&iuml;ve Solution</h2>
+                      <p>Recommend the most popular item. This may be popularity in terms of total number of plays of songs, total number of purchases, or average 5 star ratings.</p>
+                    </div>
       				</div>  
     			</article>  
     			<!-- End Resolution 1 -->
@@ -685,8 +690,16 @@ als_ii = TopRelated_itemitem(als_beer_factors.T)
 </pre>
 <p><br></p>
 <h4>Implicit Matrix Factorization</h4>
-<p><br></p>
+<br>
+<p>Defined by:</p>
+<ul>
+  <li><p>No negative feedback - entries must be positive.</p></li>
+  <li><p>Inherently noisy - For example, someone may drink a lot of PBR, because it is cheap, rather than because they like it.</p></li>
+  <li><p>While numerical value of explicit feedback indicates <i>preference</i>, the numerical value of implicit
+feedback indicates <i>confidence</i> that a user prefers an item.</p></li>
+</ul>
 <p>Code can be found from Chris Johnson's blog <a href="https://github.com/MrChrisJohnson/implicit-mf">here</a>, based on <a href="http://yifanhu.net/PUB/cf.pdf">this paper</a>, and demonstrated below:</p>
+<br>
 <pre class="brush: python">class ImplicitMF():
 
     def __init__(self, counts, num_factors=40, num_iterations=30,
@@ -744,8 +757,8 @@ als_ii = TopRelated_itemitem(als_beer_factors.T)
 </pre>
 <p><br></p>
 <h4>Other Methods</h4>
-<p><br></p>
-<p>Incorporating other user and item features with collaborative filtering are known as hybrid recommender systems. An example of how to incorporate features into your recommendation has been handled by the folks at <a href="https://www.lyst.com/">Lyst</a> with their python package <a href="https://github.com/lyst/lightfm">LightFM</a>.</p>
+<br>
+<p>Incorporating other user and item features with collaborative filtering are known as hybrid recommender systems. An example of how to incorporate features into your recommendation has been handled by the folks at <a href="https://www.lyst.com/">Lyst</a> with their python package <a href="https://github.com/lyst/lightfm">LightFM</a>.</p><br>
 <pre class="brush: python">from lightfm import LightFM
 model = LightFM(loss='warp')
 model.fit(train_data, epochs=30, num_threads=2, user_features=None, item_features=None)
@@ -755,7 +768,7 @@ model.fit(train_data, epochs=30, num_threads=2, user_features=None, item_feature
 	<div class="container">
 		<div class="sideText3">
 				<span class="line"></span>
-				<p></p>
+				
 		</div>
 	</div>	   
 
@@ -936,16 +949,17 @@ def ndcg_at_k(r, k, method=0):
       				<div class="center">  
 						    <p><br></p>
                   <h2>Best Practices</h2>
-                  <p>
-                  Recommendation problems can be fun, but tough to evaluate. It's important to absorb the points above, and think about what approaches make the most sense for your situation.</p>
+                  <br>
+                  <p>Recommendation problems can be fun, but tough to evaluate. It's important to absorb the points above, and think about what approaches make the most sense for your situation.</p>
                   <p>Giving advice that will work generically is hard, but the following list will probably cover best practices is most situations:</p>
-                  <p>Think carefully about the right strategy for splitting your data. Leave-k-out is simple, but may not be well-suited to data which has many users with few entries. M-fold is a good representation of your final model, but may require enough data and available computation.</p>
-                  <p>Metrics should be chosen with the end goal in mind. Error and classification metrics are good for assessing overall performance, but if recommending N items, one should at least consider rank-based metrics.</p>
-                  <p>Know the details of metrics, be able to provide a plain language explaination and justify your choices.</p>
-                  <p>When practically feasible, check that your metrics are statistically significant when comparing different models. You may need to run more train/test experiments.</p>
-                  <p>It's always a good idea to examine how metrics vary with subgroups of the data. For example, how does a given metric change for users with few item entries versus those with lots.</p>
-                  <p>Convince your audience - explain the metrics, but help them connect. Qualitative approaches can help here.</p>
-</p>
+                    <ul>
+                    <li><p>Think carefully about the right strategy for splitting your data. Leave-k-out is simple, but may not be well-suited to data which has many users with few entries. M-fold is a good representation of your final model, but may require enough data and available computation.</p></li>
+                    <li><p>Metrics should be chosen with the end goal in mind. Error and classification metrics are good for assessing overall performance, but if recommending N items, one should at least consider rank-based metrics.</p></li>
+                    <li><p>Know the details of metrics, be able to provide a plain language explaination and justify your choices.</p></li>
+                    <li><p>When practically feasible, check that your metrics are statistically significant when comparing different models. You may need to run more train/test experiments.</p></li>
+                    <li><p>It's always a good idea to examine how metrics vary with subgroups of the data. For example, how does a given metric change for users with few item entries versus those with lots.</p></li>
+                    <li><p>Convince your audience - explain the metrics, but help them connect. Qualitative approaches can help here.</p></li>
+</ul>
           				<div class="left">
             				<p></p> 
             				<div class="container">
