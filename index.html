@@ -461,10 +461,13 @@ ul.tab a:focus {background-color: #ddd;}
                       <p>For the demonstrative purposes of this post I will be using a dataset of beer reviews from a popular beer rating website. The full python script to accompany this work can be found <a target='_blank' href="python-code/">here</a>, and a link to the dataset can be found <a href="http://s3.amazonaws.com/beer-reco/data/beer_reviews.csv" target = "_blank">here</a> (170Mb).</p>
                       <br>
                       <p>Resources</p>
-                      <li><p><a href="http://bugra.github.io/work/notes/2014-04-19/alternating-least-squares-method-for-collaborative-filtering/">Blog post on alternating least squares</a></p></li>
-                      <li><p><a href="https://jeremykun.com/2016/04/18/singular-value-decomposition-part-1-perspectives-on-linear-algebra/">Blog post on singular value decomposition by Jeremy Kun</a></p></li>
-                      <li><p><a href="https://making.dia.co/embedding-everything-for-anything2anything-recommendations-fca7f58f53ff#.pms8hvlyj">Blog post on matrix factorization by Ethan RosenThal of Dia & Co</a></p></li>
-                      <li><p>Jupyter notebook on validating recommendation algoritms on Insight dropbox</p></li>
+                      <ul>
+                        <li><p><a href="https://jeremykun.com/2016/04/18/singular-value-decomposition-part-1-perspectives-on-linear-algebra/">Blog post on singular value decomposition by Jeremy Kun.</a></p></li>
+                        <li><p><a href="https://making.dia.co/embedding-everything-for-anything2anything-recommendations-fca7f58f53ff#.pms8hvlyj">Blog post on matrix factorization by Ethan Rosenthal of Dia & Co.</a></p></li>
+                        <li><p><a href="http://bugra.github.io/work/notes/2014-04-19/alternating-least-squares-method-for-collaborative-filtering/">Blog post on alternating least squares.</a></p></li>
+                        <li><p>Jupyter notebook on validating recommendation algoritms on Insight dropbox.</p></li>
+                        <li><p><a href="http://www.benfrederickson.com/matrix-factorization/">Blog post on matrix factorization by Ben Frederickson.</a></p></li>
+                      </ul>
               			</div>
               			<div class="left"></div>
                     <div>
@@ -539,8 +542,9 @@ ul.tab a:focus {background-color: #ddd;}
                       </div>
                       -->
                       
-                      <h3></h3>
-                      <p></p>
+                      <h3>Sparse Matrices</h3>
+                      <p>Sparse matrices are your friend. In python they help you efficiently work with large matrices that are mostly nonzeros. For example, in the case of recommending beers, it is highly unlikely that most of the users have tried, letalone rated, most of the beers in the dataset. As such the generated 2D matrix of unique users and unique beers will be mostly sparse.</p>
+                      <p>In python they are in the scipy.sparse library. They come in a number of flavours that can be explored on scipy's webpage <a href="https://docs.scipy.org/doc/scipy/reference/sparse.html">here</a>.</p>
                       <br>
                 <pre class= "brush: python">beer_data = pd.read_csv('beer_reviews/beer_reviews.csv')
 
@@ -789,7 +793,8 @@ model.fit(train_data, epochs=30, num_threads=2, user_features=None, item_feature
     <br>
     <h4>Miss-k-out</h4>
     <br>
-    <p>A useful variant that combines leave-k-out and standard K-fold crossvValidation is (sometimes) called M-fold cross validation. The idea is simple - split the data into a training set and holdout set. On the holdout set, perform leave-k-out.</p>
+    <p>Miss-k-out involves removing k items from the training set and attempting to predict them</p>
+    <p>A useful variant that combines leave-k-out and standard K-fold cross validation is (sometimes) called M-fold cross validation. The idea is simple - split the data into a training set and holdout set. On the holdout set, perform leave-k-out.</p>
     <br>
     <h2>Evaluation Metrics</h2>
     <h4>Mean Average Precision</h4>
