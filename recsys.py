@@ -16,6 +16,8 @@ import time
 from scipy.sparse import coo_matrix, csr_matrix, eye, diags, csc_matrix
 from scipy.sparse.linalg import spsolve
 import pandas as pd
+import boto3
+import json
 
 def bm25_weight(data, K1=100, B=0.8):
     """ Weighs each row of the matrix data by BM25 weighting """
@@ -176,11 +178,104 @@ class ImplicitMF():
         
 # ==============================================================================
 
+
+
+
+# on beer data =================================================================
+beer_data = pd.read_csv('beer_reviews/beer_reviews.csv')
+
+test_data = beer_data.groupby('review_profilename', as_index=False).apply(lambda x: x.loc[np.random.choice(x.index, 1, replace=False),:])
+l1 = [x[1] for x in test_data.index.tolist()]
+
+train_data = beer_data.drop(beer_data.index[l1]).dropna()
+
+train_data['review_profilename'] = train_data['review_profilename'].astype("category")
+train_data['beer_name'] = train_data['beer_name'].astype("category")
+
+print "Unique users: %s" % (len(train_data['review_profilename'].unique()))
+print "Unique beers: %s" % (len(train_data['beer_name'].unique()))
+
+# create a sparse matrix of all the artist/user/play triples
+reviews = csc_matrix((train_data['review_overall'].astype(float), 
+                   (train_data['beer_name'].cat.codes, 
+                    train_data['review_profilename'].cat.codes)))
+
+beerid2beername = dict(enumerate(train_data['beer_name'].cat.categories))
+beername2beerid = {v: k for k, v in beerid2beername.items()}
+
+userid2username = dict(enumerate(train_data['review_profilename'].cat.categories))
+username2userid  = {v: k for k, v in userid2username.items()}
+
+#SVD ============
+denseVecSize = 25
+beer_factors, s, userbeer_factors = svds(bm25_weight(reviews.tocoo()), denseVecSize)
+Related_beers_ii_svd25 = TopRelated_itemitem(beer_factors.T)
+
+denseVecSize = 50
+beer_factors_50, s, userbeer_factors_50 = svds(bm25_weight(reviews.tocoo()), denseVecSize)
+Related_beers_ii_svd50 = TopRelated_itemitem(beer_factors_50.T)
+
+denseVecSize = 100
+beer_factors_100, s, userbeer_factors_100 = svds(bm25_weight(reviews.tocoo()), denseVecSize)
+Related_beers_ii_svd100 = TopRelated_itemitem(beer_factors_100.T)
+
+# Implicit =========================
+impl = ImplicitMF(reviews.tocsr())
+impl.train_model()
+# user vectors is beers
+impl_ii = TopRelated_itemitem(impl.user_vectors.T)
+
+# ALS =================
+als_userbeer_factors, als_beer_factors = alternating_least_squares(bm25_weight(reviews.tocoo()), 50)
+als_ii = TopRelated_itemitem(als_userbeer_factors.T)
+
+
+# Push to s3 - This won't work unless you set up amazon CLI on your computer
+s3 = boto3.resource('s3')
+for i in range(beer_factors.shape[0]):
+    beer_recs_ii_svd25 = [{"value":beerid2beername[rec[0]].replace('"',''), "users":rec[1]} 
+                           for rec in Related_beers_ii_svd25.get_related(i)]
+    beer_recs_ii_svd50 = [{"value":beerid2beername[rec[0]].replace('"',''), "users":rec[1]} 
+                           for rec in Related_beers_ii_svd50.get_related(i)]
+    beer_recs_ii_svd100 = [{"value":beerid2beername[rec[0]].replace('"',''), "users":rec[1]} 
+                            for rec in Related_beers_ii_svd100.get_related(i)]
+    beer_recs_impl_ii = [{"value":beerid2beername[rec[0]].replace('"',''), "users":rec[1]} 
+                          for rec in impl_ii.get_related(i)]
+    beer_recs_als_ii = [{"value":beerid2beername[rec[0]].replace('"',''), "users":rec[1]} 
+                         for rec in als_ii.get_related(i)]
+    
+    # remove spaces
+    beername = beerid2beername[i].replace(' ', '_').replace('"','')
+    beer_recs = {"svd25-item":beer_recs_ii_svd25, "implicit":beer_recs_impl_ii, 
+                 "svd50-item":beer_recs_ii_svd50, "als":beer_recs_als_ii, 
+                 "svd100-item":beer_recs_ii_svd100}
+    # jsonify - just works better - always get double quotes etc
+    with open('temp.json', 'wb') as fp:
+        json.dump(beer_recs, fp)  
+    try:
+        s3.Object('beer-reco', beername+'.json').put(Body=open('temp.json', 'rb'), ACL='public-read')
+    except UnicodeDecodeError:
+        print ("can't assign: %s" % (beername))
+
+
+# Get top ~10k 
+count_data = beer_data['beer_name'].value_counts()    
+count_data_top10k = count_data[count_data>15]    
+beer_recs_all = []
+for index, value in count_data_top10k.iteritems():
+    beer_recs_all.append({"value":index, "users":value})
+s3.Object('beer-reco', 'top10k').put(Body = str(beer_recs_all), 
+          ACL='public-read', ContentType='string')
+
+
+
+# if movies are your thing ==================================================== 
 movie_data = movielens.fetch_movielens()
 n_users, n_items = movie_data['train'].shape
 
 model = LightFM(loss='warp')
-model.fit(movie_data['train'], epochs=30, num_threads=2)
+model.fit(movie_data['train'], epochs=30, num_threads=2, user_features=None, 
+          item_features=None)
 
 print("Train precision: %.2f" % precision_at_k(model, movie_data['train'], k=5).mean())
 print("Test precision: %.2f" % precision_at_k(model, movie_data['test'], k=5).mean())
@@ -206,9 +301,6 @@ top_movies = np.asarray(np.argsort(nonzero_ratings))[-22:-2]
 
 print 'Top Movies: %s' % movie_data['item_labels'][top_movies]
 
-
-# cosine similarity
-c1 = np.linalg.norm(movie_data['train'], axis=-1)
 
 # svd ======================================================================
 denseVecSize = 25
@@ -243,86 +335,3 @@ als_ii = TopRelated_itemitem(als_movie_factors.T)
 print 'Movie pick: %s' % movie_data['item_labels'][mov]
 als_ii = [rec[0] for rec in als_ii.get_related(mov)]
 print 'Recomendations: %s' % movie_data['item_labels'][als_ii[1:]]
-
-
-# on beer data =================================================================
-beer_data = pd.read_csv('beer_reviews/beer_reviews.csv')
-
-test_data = beer_data.groupby('review_profilename', as_index=False).apply(lambda x: x.loc[np.random.choice(x.index, 1, replace=False),:])
-l1 = [x[1] for x in test_data.index.tolist()]
-
-train_data = beer_data.drop(beer_data.index[l1]).dropna()
-
-train_data['review_profilename'] = train_data['review_profilename'].astype("category")
-train_data['beer_name'] = train_data['beer_name'].astype("category")
-
-print "Unique users: %s" % (len(train_data['review_profilename'].unique()))
-print "Unique beers: %s" % (len(train_data['beer_name'].unique()))
-
-# create a sparse matrix of all the artist/user/play triples
-reviews = csc_matrix((train_data['review_overall'].astype(float), 
-                   (train_data['beer_name'].cat.codes, 
-                    train_data['review_profilename'].cat.codes)))
-
-beerid2beername = dict(enumerate(train_data['beer_name'].cat.categories))
-beername2beerid = {v: k for k, v in beerid2beername.items()}
-
-userid2username = dict(enumerate(train_data['review_profilename'].cat.categories))
-username2userid  = {v: k for k, v in userid2username.items()}
-
-#SVD                    
-denseVecSize = 25
-beer_factors, s, userbeer_factors = svds(bm25_weight(reviews.tocoo()), denseVecSize)
-
-beer = 100
-Related_beers_ii = TopRelated_itemitem(beer_factors.T)
-print 'Beer pick: %s' % beerid2beername[beer]
-beer_recs = [rec[0] for rec in Related_beers_ii.get_related(beer)]
-print 'Recomendations: %s' % [beerid2beername[rec] for rec in beer_recs]
-
-import boto3
-s3 = boto3.resource('s3')
-for i in range(beer_factors.shape[0]):
-    beer_recs = [{"value":beerid2beername[rec[0]], "users":rec[1]} for rec in Related_beers_ii.get_related(beer)]
-    beername = beerid2beername[i].replace(' ', '_')
-    try:
-        s3.Object('beer-reco', beername).put(Body = str(beer_recs), ACL='public-read', ContentType='string')
-    except UnicodeDecodeError:
-        print ("can't assign: %s" % (beername))
-    if i%1000==0:
-        print(i)
-
-import json
-
-beer_recs
-        
-        
-count_data = beer_data['beer_name'].value_counts()    
-count_data_top10k = count_data[count_data>15]    
-beer_recs_all = []
-for index, value in count_data_top10k.iteritems():
-    beer_recs_all.append({"value":index, "users":value})
-s3.Object('beer-reco', 'top10k').put(Body = str(beer_recs_all), ACL='public-read', ContentType='string')
-
-
-
-   
-als_userbeer_factors, als_beer_factors = alternating_least_squares(bm25_weight(reviews.tocoo()), 
-                                                                   factors = 50, iterations = 10    )
-
-als_ii = TopRelated_itemitem(als_beer_factors.T)
-beer = 1
-print 'Beer pick: %s' % beerid2beername[beer]
-recs = [rec[0] for rec in als_ii.get_related(beer)]
-print 'Recomendations: %s' % [beerid2beername[rec] for rec in recs[1:]]
-
-beer_dict = {}
-for i in range(als_beer_factors.shape[0]):
-    beer_recs = als_ii.get_related(i)
-    beer_dict[beerid2beername[i]] = {beerid2beername[rec[0]]: rec[1] for rec in beer_recs}
-    if i%1000 == 0:
-        print(i)
-
-import json
-with open('beer_recs_all.json', 'wb') as fp:
-    json.dump(beer_recs_all, fp)            
